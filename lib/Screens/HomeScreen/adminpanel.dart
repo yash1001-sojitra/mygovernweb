@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DashBoard extends StatefulWidget {
   @override
@@ -17,150 +18,170 @@ class _DashBoardState extends State<DashBoard> {
     final deviceSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Stack(children: [
-        BackgroundImage(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            NavigationRail(
-              // labelType: NavigationRailLabelType.selected,
-              selectedIndex: _selected_index,
-              onDestinationSelected: (int index) {
-                setState(() {
-                  _selected_index = index;
-                });
-              },
+      body: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: Stack(children: [
+          BackgroundImage(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              NavigationRail(
+                // labelType: NavigationRailLabelType.selected,
+                selectedIndex: _selected_index,
+                onDestinationSelected: (int index) {
+                  setState(() {
+                    _selected_index = index;
+                  });
+                },
 
-              extended: isExpanded,
-              backgroundColor: Colors.deepPurple.shade400.withOpacity(0.7),
-              unselectedIconTheme:
-                  IconThemeData(color: Colors.white, opacity: 1),
-              unselectedLabelTextStyle: TextStyle(
-                color: Color.fromRGBO(255, 255, 255, 1),
+                extended: isExpanded,
+                backgroundColor: Colors.deepPurple.shade400.withOpacity(0.7),
+                unselectedIconTheme:
+                    IconThemeData(color: Colors.white, opacity: 1),
+                unselectedLabelTextStyle: TextStyle(
+                  color: Color.fromRGBO(255, 255, 255, 1),
+                ),
+                selectedIconTheme:
+                    IconThemeData(color: Colors.deepPurple.shade900),
+                selectedLabelTextStyle: TextStyle(
+                    color: Colors.deepPurple, fontWeight: FontWeight.w900),
+                destinations: [
+                  NavigationRailDestination(
+                      icon: Icon(Icons.home),
+                      label: Text("Home"),
+                      selectedIcon: Icon(Icons.home)),
+                  NavigationRailDestination(
+                      icon: Icon(Icons.logout),
+                      label: Text("logout"),
+                      selectedIcon: Icon(Icons.logout)),
+                ],
               ),
-              selectedIconTheme:
-                  IconThemeData(color: Colors.deepPurple.shade900),
-              destinations: [
-                NavigationRailDestination(
-                    icon: Icon(Icons.home),
-                    label: Text("Home"),
-                    selectedIcon: Icon(Icons.home)),
-                NavigationRailDestination(
-                    icon: Icon(Icons.logout),
-                    label: Text("logout"),
-                    selectedIcon: Icon(Icons.logout)),
-              ],
-            ),
-            const VerticalDivider(
-              thickness: 1,
-              width: 1,
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            isExpanded = !isExpanded;
-                          });
-                        },
-                        icon: const Icon(Icons.menu)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/images/national.png",
-                          height: 100,
-                          width: 100,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Divider(),
-                    Expanded(
-                      child: Padding(
-                        padding: deviceSize.width > 768
-                            ? EdgeInsets.symmetric(horizontal: 50.0)
-                            : EdgeInsets.symmetric(horizontal: 50),
-                        child: deviceSize.width > 768
-                            ? deviceSize.width > 1000
-                                ? Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      AddCard(
-                                          imgpath: "assets/images/category.png",
-                                          title: category[0]),
-                                      AddCard(
-                                          imgpath: "assets/images/add.png",
-                                          title: category[1]),
-                                      AddCard(
-                                          imgpath: "assets/images/edit.png",
-                                          title: category[2]),
-                                    ],
-                                  )
-                                : SingleChildScrollView(
-                                    child: Column(
+              const VerticalDivider(
+                thickness: 1,
+                width: 1,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      deviceSize.width > 768
+                          ? IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  isExpanded = !isExpanded;
+                                });
+                              },
+                              icon: const Icon(Icons.menu))
+                          : SizedBox(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/images/national.png",
+                            height: 100,
+                            width: 100,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Divider(),
+                      Expanded(
+                        child: Padding(
+                          padding: deviceSize.width > 768
+                              ? EdgeInsets.symmetric(horizontal: 50.0)
+                              : EdgeInsets.symmetric(horizontal: 50),
+                          child: deviceSize.width > 768
+                              ? deviceSize.width > 1000
+                                  ? Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      mainAxisSize: MainAxisSize.min,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
                                         AddCard(
                                             imgpath:
                                                 "assets/images/category.png",
-                                            title: category[0]),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
+                                            title: category[0],
+                                            routename: "/Add_category"),
                                         AddCard(
                                             imgpath: "assets/images/add.png",
-                                            title: category[1]),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
+                                            title: category[1],
+                                            routename: "/Add_new_doc"),
                                         AddCard(
-                                            imgpath: "assets/images/edit.png",
-                                            title: category[2]),
+                                          imgpath: "assets/images/edit.png",
+                                          title: category[2],
+                                          routename: "/Edit_doc",
+                                        ),
                                       ],
-                                    ),
-                                  )
-                            : SingleChildScrollView(
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    AddCard(
-                                        imgpath: "assets/images/category.png",
-                                        title: category[0]),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    AddCard(
-                                        imgpath: "assets/images/add.png",
-                                        title: category[1]),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    AddCard(
+                                    )
+                                  : SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          AddCard(
+                                              imgpath:
+                                                  "assets/images/category.png",
+                                              title: category[0],
+                                              routename: "/Add_category"),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          AddCard(
+                                              imgpath: "assets/images/add.png",
+                                              title: category[1],
+                                              routename: "/Add_new_doc"),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          AddCard(
+                                            imgpath: "assets/images/edit.png",
+                                            title: category[2],
+                                            routename: "/Edit_doc",
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                              : SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      AddCard(
+                                          imgpath: "assets/images/category.png",
+                                          title: category[0],
+                                          routename: "/Add_category"),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      AddCard(
+                                          imgpath: "assets/images/add.png",
+                                          title: category[1],
+                                          routename: "/Add_new_doc"),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      AddCard(
                                         imgpath: "assets/images/edit.png",
-                                        title: category[2]),
-                                  ],
+                                        title: category[2],
+                                        routename: "/Edit_doc",
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                      ),
-                    )
-                  ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
-        ),
-      ]),
+              )
+            ],
+          ),
+        ]),
+      ),
     );
   }
 }
@@ -202,7 +223,12 @@ class BackgroundImage extends StatelessWidget {
 class AddCard extends StatefulWidget {
   String imgpath;
   String title;
-  AddCard({required this.imgpath, required this.title, super.key});
+  String routename;
+  AddCard(
+      {required this.imgpath,
+      required this.title,
+      required this.routename,
+      super.key});
 
   @override
   State<AddCard> createState() => _AddCardState();
@@ -211,42 +237,47 @@ class AddCard extends StatefulWidget {
 class _AddCardState extends State<AddCard> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Container(
-          height: 220,
-          width: 250,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.white.withOpacity(0.5)),
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-            color: Colors.deepPurple.shade400.withOpacity(0.3),
-          ),
-          child: Center(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 15,
-                ),
-                Image.asset(
-                  widget.imgpath,
-                  height: 150,
-                  width: 150,
-                ),
-                Text(
-                  widget.title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: "calibri",
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w300),
-                )
-              ],
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(widget.routename);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            height: 220,
+            width: 250,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white.withOpacity(0.5)),
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+              color: Colors.deepPurple.shade400.withOpacity(0.3),
+            ),
+            child: Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Image.asset(
+                    widget.imgpath,
+                    height: 150,
+                    width: 150,
+                  ),
+                  Text(
+                    widget.title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: "calibri",
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w300),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
