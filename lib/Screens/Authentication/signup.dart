@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'adminpanel.dart';
+import '../HomeScreen/adminpanel.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen();
@@ -150,50 +150,6 @@ class _SignUpFormState extends State<SignUpForm> {
                     ),
                     label: const Text("Google SignIn"),
                   ),
-                  /* Row(
-                    children: const [
-                      Expanded(
-                        child: Divider(
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        " Or Connect Using ",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () async {},
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Image.asset(
-                            "assets/images/google.png",
-                            height: 35,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ), */
                   const SizedBox(height: 20),
                   const Text("Forgot Password?"),
                 ],
