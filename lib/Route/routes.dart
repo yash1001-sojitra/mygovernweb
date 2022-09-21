@@ -6,7 +6,7 @@ import 'package:mygovernweb/Logic/widgets/addOrEdit/addcategory.dart';
 import 'package:mygovernweb/Logic/widgets/addOrEdit/addnewdoc.dart';
 import 'package:mygovernweb/Logic/widgets/addOrEdit/editdoc.dart';
 import 'package:mygovernweb/Screens/Authentication/signup.dart';
-import 'package:mygovernweb/Screens/HomeScreen/homescreen.dart';
+import 'package:mygovernweb/Screens/HomeScreen/adminpanel.dart';
 
 class Flurorouter {
   static final FluroRouter router = FluroRouter();
@@ -14,16 +14,16 @@ class Flurorouter {
   static Handler _signUpHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, dynamic> params) =>
           SignUpScreen());
-
-  static Handler _homeHandler = Handler(
+  static Handler _HomescreenHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, dynamic> params) =>
-          HomePage());
+          DashBoard());
   static Handler _AddCategoryHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, dynamic> params) =>
           AddCategory());
-  static Handler _AddNewDocHandler = Handler(
+  static Handler _AddnewdocHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, dynamic> params) =>
-          AddNewDoc());
+          AddnewDoc());
+
   static Handler _EditDocHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, dynamic> params) =>
           EditDoc());
@@ -31,11 +31,16 @@ class Flurorouter {
   static void setUpRouter() {
     router.define('/',
         handler: _signUpHandler, transitionType: TransitionType.fadeIn);
+<<<<<<< HEAD
+=======
+    router.define('/home',
+        handler: _HomescreenHandler, transitionType: TransitionType.fadeIn);
+>>>>>>> 647034ed35ac8ae29484229193cf507d7f9853ad
 
     router.define('/Add_category',
         handler: _AddCategoryHandler, transitionType: TransitionType.fadeIn);
     router.define('/Add_new_doc',
-        handler: _AddNewDocHandler, transitionType: TransitionType.fadeIn);
+        handler: _AddnewdocHandler, transitionType: TransitionType.fadeIn);
     router.define('/Edit_doc',
         handler: _EditDocHandler, transitionType: TransitionType.fadeIn);
   }

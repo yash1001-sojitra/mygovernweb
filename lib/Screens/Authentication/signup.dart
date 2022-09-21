@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:http/http.dart';
 import 'package:lottie/lottie.dart';
 
-import 'adminpanel.dart';
+import '../HomeScreen/adminpanel.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -150,10 +153,11 @@ class _SignUpFormState extends State<SignUpForm> {
                       style: ElevatedButton.styleFrom(
                           minimumSize: const Size.fromHeight(50)),
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DashBoard()));
+                        Get.toNamed('/home');
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => DashBoard()));
                       },
                       icon: const Icon(Icons.login),
                       label: Text(_isLogin ? 'Login' : 'Register'),
