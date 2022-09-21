@@ -129,9 +129,10 @@ class _SignUpFormState extends State<SignUpForm> {
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                            border: Border(
-                                bottom:
-                                    BorderSide(color: Colors.grey.shade200))),
+                          border: Border(
+                            bottom: BorderSide(color: Colors.grey.shade200),
+                          ),
+                        ),
                         child: TextFormField(
                           controller: passwordController,
                           obscureText: true,
