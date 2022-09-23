@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:http/http.dart';
 import 'package:lottie/lottie.dart';
-
-import '../HomeScreen/adminpanel.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mygovernweb/Logic/widgets/admin_card.dart';
 
 class DashBoard extends StatefulWidget {
   @override
@@ -16,12 +17,26 @@ class _DashBoardState extends State<DashBoard> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-
+    if (deviceSize.width < 764) {
+      setState(() {
+        isExpanded = false;
+      });
+    }
     return Scaffold(
       body: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: Stack(children: [
-          BackgroundImage(),
+          //const BackgroundImage(),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                isExpanded = false;
+              });
+            },
+            child: Container(
+              color: Colors.grey.shade200,
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -35,17 +50,25 @@ class _DashBoardState extends State<DashBoard> {
                 },
 
                 extended: isExpanded,
-                backgroundColor: Colors.deepPurple.shade400.withOpacity(0.7),
-                unselectedIconTheme:
-                    IconThemeData(color: Colors.white, opacity: 1),
-                unselectedLabelTextStyle: TextStyle(
+                //backgroundColor: Colors.deepPurple.shade400.withOpacity(0.7),
+                backgroundColor: const Color(0xff2d3037),
+                /* unselectedIconTheme:
+                    const IconThemeData(color: Colors.white, opacity: 1), */
+                unselectedIconTheme: const IconThemeData(color: Colors.grey),
+                /* unselectedLabelTextStyle: const TextStyle(
                   color: Color.fromRGBO(255, 255, 255, 1),
+                ), */
+                unselectedLabelTextStyle: const TextStyle(
+                  color: Colors.grey,
                 ),
-                selectedIconTheme:
-                    IconThemeData(color: Colors.deepPurple.shade900),
-                selectedLabelTextStyle: TextStyle(
-                    color: Colors.deepPurple, fontWeight: FontWeight.w900),
-                destinations: [
+                /* selectedIconTheme:
+                    IconThemeData(color: Colors.deepPurple.shade900), */
+                selectedIconTheme: const IconThemeData(color: Colors.white),
+                /* selectedLabelTextStyle: const TextStyle(
+                    color: Colors.deepPurple, fontWeight: FontWeight.w900), */
+                selectedLabelTextStyle: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.w900),
+                destinations: const [
                   NavigationRailDestination(
                       icon: Icon(Icons.home),
                       label: Text("Home"),
@@ -74,7 +97,7 @@ class _DashBoardState extends State<DashBoard> {
                                 });
                               },
                               icon: const Icon(Icons.menu))
-                          : SizedBox(),
+                          : const SizedBox(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -85,93 +108,86 @@ class _DashBoardState extends State<DashBoard> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Divider(),
+                      const SizedBox(height: 10),
+                      const Divider(),
+                      SizedBox(height: deviceSize.height * 0.05),
                       Expanded(
-                        child: Padding(
-                          padding: deviceSize.width > 768
-                              ? EdgeInsets.symmetric(horizontal: 50.0)
-                              : EdgeInsets.symmetric(horizontal: 50),
-                          child: deviceSize.width > 768
-                              ? deviceSize.width > 1000
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        AddCard(
-                                            imgpath:
-                                                "assets/images/category.png",
-                                            title: category[0],
-                                            routename: "/Add_category"),
-                                        AddCard(
-                                            imgpath: "assets/images/add.png",
-                                            title: category[1],
-                                            routename: "/Add_new_doc"),
-                                        AddCard(
-                                          imgpath: "assets/images/edit.png",
-                                          title: category[2],
-                                          routename: "/Edit_doc",
-                                        ),
-                                      ],
-                                    )
-                                  : SingleChildScrollView(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          AddCard(
+                        child: SingleChildScrollView(
+                          child: Center(
+                            child: Padding(
+                                padding: deviceSize.width > 768
+                                    ? const EdgeInsets.symmetric(horizontal: 10)
+                                    : const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                child: deviceSize.width > 768
+                                    ? SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          children: const [
+                                            AdminCard('add_category',
+                                                'Add Cegory', '/Add_category'),
+                                            SizedBox(width: 20),
+                                            AdminCard(
+                                                'add_doc',
+                                                'Add New Document',
+                                                '/Add_new_doc'),
+                                            SizedBox(width: 20),
+                                            AdminCard('edit_doc',
+                                                'Edit Document', '/Edit_doc'),
+
+                                            /* AddCard(
                                               imgpath:
                                                   "assets/images/category.png",
                                               title: category[0],
                                               routename: "/Add_category"),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
                                           AddCard(
                                               imgpath: "assets/images/add.png",
                                               title: category[1],
                                               routename: "/Add_new_doc"),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
                                           AddCard(
                                             imgpath: "assets/images/edit.png",
                                             title: category[2],
                                             routename: "/Edit_doc",
-                                          ),
+                                          ), */
+                                          ],
+                                        ),
+                                      )
+                                    : Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: const [
+                                          /* AddCard(
+                                        imgpath:
+                                            "assets/images/category.png",
+                                        title: category[0],
+                                        routename: "/Add_category"),
+                                        const SizedBox(height: 10),
+                                        AddCard(
+                                        imgpath: "assets/images/add.png",
+                                        title: category[1],
+                                        routename: "/Add_new_doc"),
+                                        const SizedBox(height: 10),
+                                        AddCard(
+                                      imgpath: "assets/images/edit.png",
+                                      title: category[2],
+                                      routename: "/Edit_doc",
+                                        ), */
+                                          AdminCard('add_category', 'Add gory',
+                                              '/Add_category'),
+                                          SizedBox(height: 20),
+                                          AdminCard(
+                                              'add_doc',
+                                              'Add New Document',
+                                              '/Add_new_doc'),
+                                          SizedBox(height: 20),
+                                          AdminCard('edit_doc', 'Edit Document',
+                                              '/Edit_doc'),
                                         ],
-                                      ),
-                                    )
-                              : SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      AddCard(
-                                          imgpath: "assets/images/category.png",
-                                          title: category[0],
-                                          routename: "/Add_category"),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      AddCard(
-                                          imgpath: "assets/images/add.png",
-                                          title: category[1],
-                                          routename: "/Add_new_doc"),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      AddCard(
-                                        imgpath: "assets/images/edit.png",
-                                        title: category[2],
-                                        routename: "/Edit_doc",
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                      )),
+                          ),
                         ),
                       )
                     ],
@@ -249,13 +265,13 @@ class _AddCardState extends State<AddCard> {
             width: 250,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.white.withOpacity(0.5)),
-              borderRadius: BorderRadius.all(Radius.circular(30)),
+              borderRadius: const BorderRadius.all(Radius.circular(30)),
               color: Colors.deepPurple.shade400.withOpacity(0.3),
             ),
             child: Center(
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Image.asset(
@@ -266,7 +282,7 @@ class _AddCardState extends State<AddCard> {
                   Text(
                     widget.title,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: "calibri",
                         fontSize: 20,
                         color: Colors.black,

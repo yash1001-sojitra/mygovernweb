@@ -2,11 +2,12 @@
 
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:mygovernweb/Logic/widgets/addOrEdit/addcategory.dart';
-import 'package:mygovernweb/Logic/widgets/addOrEdit/addnewdoc.dart';
-import 'package:mygovernweb/Logic/widgets/addOrEdit/editdoc.dart';
 import 'package:mygovernweb/Screens/Authentication/signup.dart';
 import 'package:mygovernweb/Screens/HomeScreen/adminpanel.dart';
+
+import '../Screens/addOrEdit/addcategory.dart';
+import '../Screens/addOrEdit/addnewdoc.dart';
+import '../Screens/addOrEdit/editdoc.dart';
 
 class Flurorouter {
   static final FluroRouter router = FluroRouter();
@@ -31,12 +32,8 @@ class Flurorouter {
   static void setUpRouter() {
     router.define('/',
         handler: _signUpHandler, transitionType: TransitionType.fadeIn);
-<<<<<<< HEAD
-=======
     router.define('/home',
         handler: _HomescreenHandler, transitionType: TransitionType.fadeIn);
->>>>>>> 647034ed35ac8ae29484229193cf507d7f9853ad
-
     router.define('/Add_category',
         handler: _AddCategoryHandler, transitionType: TransitionType.fadeIn);
     router.define('/Add_new_doc',
