@@ -39,7 +39,7 @@ class _AddnewDocState extends State<AddnewDoc> {
                 child: Container(
                   padding: const EdgeInsets.all(15),
                   //height: 400,
-                  width: size.width * 0.35,
+                  width: size.width * 0.40,
                   child: Form(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -122,7 +122,7 @@ class _AddnewDocState extends State<AddnewDoc> {
                                       child: Text(
                                     'Add',
                                     style: TextStyle(
-                                        fontSize: 20, color: Colors.white),
+                                        fontSize: 17, color: Colors.white),
                                   )),
                                 ),
                               ),
@@ -141,8 +141,9 @@ class _AddnewDocState extends State<AddnewDoc> {
                                   child: Flexible(
                                       child: Text(
                                     'Choose',
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        fontSize: 20, color: Colors.white),
+                                        fontSize: 17, color: Colors.white),
                                   )),
                                 ),
                               ),
@@ -169,7 +170,7 @@ class _AddnewDocState extends State<AddnewDoc> {
                               CustomDecoration.containerCornerRadiusDecoration,
                           child: Row(
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
                               CircleAvatar(
@@ -178,17 +179,17 @@ class _AddnewDocState extends State<AddnewDoc> {
                                 child: CircleAvatar(
                                   backgroundImage: pickedFile != null
                                       ? FileImage((File("${pickedFile!.path}")))
-                                      : AssetImage(
+                                      : const AssetImage(
                                               "assets/images/add-image.jpg")
                                           as ImageProvider,
                                   radius: 30,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 30,
                               ),
                               TextButton(
-                                child: Text("Select Icon"),
+                                child: const Text("Select Icon"),
                                 onPressed: () {
                                   selectFile();
                                 },
@@ -200,6 +201,23 @@ class _AddnewDocState extends State<AddnewDoc> {
                         const RequiredDocument(),
                         const SizedBox(height: 10),
                         const Steps(),
+                        const SizedBox(height: 20),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                color: Colors.deepPurpleAccent,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const Center(
+                                child: Text(
+                              "Upload Details",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            )),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -229,22 +247,11 @@ class _AddnewDocState extends State<AddnewDoc> {
       return showDialog(
           context: context,
           builder: (BuildContext context) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           });
     } else
       return null;
   }
-
-  Widget buildCircle({
-    required Widget child,
-    required double all,
-  }) =>
-      ClipOval(
-          child: Container(
-        padding: EdgeInsets.all(all),
-        color: Colors.white,
-        child: child,
-      ));
 }
