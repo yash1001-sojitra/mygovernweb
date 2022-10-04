@@ -1,15 +1,26 @@
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mygovernweb/Screens/addOrEdit/widgets/requireddoc.dart';
 import 'package:mygovernweb/Screens/addOrEdit/widgets/steps.dart';
 
 import '../../Logic/widgets/decoration.dart';
 
-class AddnewDoc extends StatelessWidget {
+class AddnewDoc extends StatefulWidget {
   const AddnewDoc({super.key});
 
   @override
+  State<AddnewDoc> createState() => _AddnewDocState();
+}
+
+class _AddnewDocState extends State<AddnewDoc> {
+  late File imageFile;
+  PlatformFile? pickedFile;
+  bool showLoading = false;
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -149,6 +160,42 @@ class AddnewDoc extends StatelessWidget {
                                     "Document Name"),
                           ),
                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration:
+                              CustomDecoration.containerCornerRadiusDecoration,
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 10,
+                              ),
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                  backgroundImage: pickedFile != null
+                                      ? FileImage((File("${pickedFile!.path}")))
+                                      : AssetImage(
+                                              "assets/images/add-image.jpg")
+                                          as ImageProvider,
+                                  radius: 30,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 30,
+                              ),
+                              TextButton(
+                                child: Text("Select Icon"),
+                                onPressed: () {
+                                  selectFile();
+                                },
+                              )
+                            ],
+                          ),
+                        ),
                         const SizedBox(height: 10),
                         const RequiredDocument(),
                         const SizedBox(height: 10),
@@ -164,4 +211,40 @@ class AddnewDoc extends StatelessWidget {
       ),
     );
   }
+
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+    if (result == null) return;
+    setState(() {
+      pickedFile = result.files.first;
+
+      if (pickedFile != null) {
+        imageFile = File(pickedFile!.path!);
+      }
+    });
+  }
+
+  Future<dynamic>? progressIndicater(BuildContext context, showLoading) {
+    if (showLoading == true) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          });
+    } else
+      return null;
+  }
+
+  Widget buildCircle({
+    required Widget child,
+    required double all,
+  }) =>
+      ClipOval(
+          child: Container(
+        padding: EdgeInsets.all(all),
+        color: Colors.white,
+        child: child,
+      ));
 }
