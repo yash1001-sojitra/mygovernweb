@@ -29,61 +29,35 @@ class _AddnewDocState extends State<AddnewDoc> {
             'assets/images/back.jpg',
             fit: BoxFit.cover,
           ),
-          Center(
-            child: SingleChildScrollView(
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                color: Colors.white.withOpacity(0.7),
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  //height: 400,
-                  width: size.width * 0.40,
-                  child: Form(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Text(
-                            'Add Document',
-                            style: TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const Divider(
-                          height: 40,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration:
-                              CustomDecoration.containerCornerRadiusDecoration,
-                          child: DropdownButton<String>(
-                            onChanged: (val) {},
-                            items: <String>['A', 'B', 'C'].map((e) {
-                              return DropdownMenuItem<String>(
-                                value: e,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: Text(e),
+          size.width > 768
+              ? Center(
+                  child: SingleChildScrollView(
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      color: Colors.white.withOpacity(0.7),
+                      child: Container(
+                        padding: const EdgeInsets.all(15),
+                        //height: 400,
+                        width: size.width * 0.40,
+                        child: Form(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Text(
+                                  'Add Document',
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                              );
-                            }).toList(),
-                            hint: const Text('Category'),
-                            iconSize: 40,
-                            borderRadius: BorderRadius.circular(10),
-                            underline: Container(),
-                            isExpanded: true,
-                            menuMaxHeight: 500,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 5,
-                              child: Container(
+                              ),
+                              const Divider(
+                                height: 40,
+                              ),
+                              Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: CustomDecoration
                                     .containerCornerRadiusDecoration,
@@ -98,7 +72,7 @@ class _AddnewDocState extends State<AddnewDoc> {
                                       ),
                                     );
                                   }).toList(),
-                                  hint: const Text('Choose Certificate'),
+                                  hint: const Text('Category'),
                                   iconSize: 40,
                                   borderRadius: BorderRadius.circular(10),
                                   underline: Container(),
@@ -106,125 +80,351 @@ class _AddnewDocState extends State<AddnewDoc> {
                                   menuMaxHeight: 500,
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Container(
-                                height: 60,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Colors.purple,
+                              const SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 5,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: CustomDecoration
+                                          .containerCornerRadiusDecoration,
+                                      child: DropdownButton<String>(
+                                        onChanged: (val) {},
+                                        items: <String>['A', 'B', 'C'].map((e) {
+                                          return DropdownMenuItem<String>(
+                                            value: e,
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(15),
+                                              child: Text(e),
+                                            ),
+                                          );
+                                        }).toList(),
+                                        hint: const Text('Choose Certificate'),
+                                        iconSize: 40,
+                                        borderRadius: BorderRadius.circular(10),
+                                        underline: Container(),
+                                        isExpanded: true,
+                                        menuMaxHeight: 500,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Container(
+                                      height: 60,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(50),
+                                        color: Colors.purple,
+                                      ),
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Flexible(
+                                            child: Text(
+                                          'Add',
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              color: Colors.white),
+                                        )),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Container(
+                                      height: 60,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(50),
+                                        color: Colors.purple,
+                                      ),
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Flexible(
+                                            child: Text(
+                                          'Choose',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              color: Colors.white),
+                                        )),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: CustomDecoration
+                                    .containerCornerRadiusDecoration,
+                                child: TextFormField(
+                                  decoration:
+                                      CustomDecoration.textFormFieldDecoration(
+                                          "Document Name"),
                                 ),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Flexible(
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: CustomDecoration
+                                    .containerCornerRadiusDecoration,
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    CircleAvatar(
+                                      radius: 30,
+                                      backgroundColor: Colors.white,
+                                      child: CircleAvatar(
+                                        backgroundImage: pickedFile != null
+                                            ? FileImage(
+                                                (File("${pickedFile!.path}")))
+                                            : const AssetImage(
+                                                    "assets/images/add-image.jpg")
+                                                as ImageProvider,
+                                        radius: 30,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 30,
+                                    ),
+                                    TextButton(
+                                      child: const Text("Select Icon"),
+                                      onPressed: () {
+                                        selectFile();
+                                      },
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              const RequiredDocument(),
+                              const SizedBox(height: 10),
+                              const Steps(),
+                              const SizedBox(height: 20),
+                              GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      color: Colors.deepPurpleAccent,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: const Center(
                                       child: Text(
-                                    'Add',
+                                    "Upload Details",
                                     style: TextStyle(
-                                        fontSize: 17, color: Colors.white),
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
                                   )),
                                 ),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Container(
-                                height: 60,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Colors.purple,
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Flexible(
-                                      child: Text(
-                                    'Choose',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: 17, color: Colors.white),
-                                  )),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration:
-                              CustomDecoration.containerCornerRadiusDecoration,
-                          child: TextFormField(
-                            decoration:
-                                CustomDecoration.textFormFieldDecoration(
-                                    "Document Name"),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration:
-                              CustomDecoration.containerCornerRadiusDecoration,
-                          child: Row(
-                            children: [
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.white,
-                                child: CircleAvatar(
-                                  backgroundImage: pickedFile != null
-                                      ? FileImage((File("${pickedFile!.path}")))
-                                      : const AssetImage(
-                                              "assets/images/add-image.jpg")
-                                          as ImageProvider,
-                                  radius: 30,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 30,
-                              ),
-                              TextButton(
-                                child: const Text("Select Icon"),
-                                onPressed: () {
-                                  selectFile();
-                                },
                               )
                             ],
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        const RequiredDocument(),
-                        const SizedBox(height: 10),
-                        const Steps(),
-                        const SizedBox(height: 20),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                                color: Colors.deepPurpleAccent,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Center(
-                                child: Text(
-                              "Upload Details",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            )),
-                          ),
-                        )
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
-          ),
+                )
+              : SingleChildScrollView(
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    color: Colors.white.withOpacity(0.7),
+                    child: Container(
+                      padding: const EdgeInsets.all(15),
+                      //height: 400,
+                      width: size.width * 0.40,
+                      child: Form(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                'Add Document',
+                                style: TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const Divider(
+                              height: 40,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: CustomDecoration
+                                  .containerCornerRadiusDecoration,
+                              child: DropdownButton<String>(
+                                onChanged: (val) {},
+                                items: <String>['A', 'B', 'C'].map((e) {
+                                  return DropdownMenuItem<String>(
+                                    value: e,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15),
+                                      child: Text(e),
+                                    ),
+                                  );
+                                }).toList(),
+                                hint: const Text('Category'),
+                                iconSize: 40,
+                                borderRadius: BorderRadius.circular(10),
+                                underline: Container(),
+                                isExpanded: true,
+                                menuMaxHeight: 500,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 5,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: CustomDecoration
+                                        .containerCornerRadiusDecoration,
+                                    child: DropdownButton<String>(
+                                      onChanged: (val) {},
+                                      items: <String>['A', 'B', 'C'].map((e) {
+                                        return DropdownMenuItem<String>(
+                                          value: e,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(15),
+                                            child: Text(e),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      hint: const Text('Choose Certificate'),
+                                      iconSize: 40,
+                                      borderRadius: BorderRadius.circular(10),
+                                      underline: Container(),
+                                      isExpanded: true,
+                                      menuMaxHeight: 500,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Container(
+                                    height: 60,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: Colors.purple,
+                                    ),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Flexible(
+                                          child: Text(
+                                        'Add',
+                                        style: TextStyle(
+                                            fontSize: 17, color: Colors.white),
+                                      )),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Container(
+                                    height: 60,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: Colors.purple,
+                                    ),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Flexible(
+                                          child: Text(
+                                        'Choose',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 17, color: Colors.white),
+                                      )),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: CustomDecoration
+                                  .containerCornerRadiusDecoration,
+                              child: TextFormField(
+                                decoration:
+                                    CustomDecoration.textFormFieldDecoration(
+                                        "Document Name"),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: CustomDecoration
+                                  .containerCornerRadiusDecoration,
+                              child: Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.white,
+                                    child: CircleAvatar(
+                                      backgroundImage: pickedFile != null
+                                          ? FileImage(
+                                              (File("${pickedFile!.path}")))
+                                          : const AssetImage(
+                                                  "assets/images/add-image.jpg")
+                                              as ImageProvider,
+                                      radius: 30,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 30,
+                                  ),
+                                  TextButton(
+                                    child: const Text("Select Icon"),
+                                    onPressed: () {
+                                      selectFile();
+                                    },
+                                  )
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            const RequiredDocument(),
+                            const SizedBox(height: 10),
+                            const Steps(),
+                            const SizedBox(height: 20),
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    color: Colors.deepPurpleAccent,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: const Center(
+                                    child: Text(
+                                  "Upload Details",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                )),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                )
         ],
       ),
     );
