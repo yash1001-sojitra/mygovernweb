@@ -175,8 +175,8 @@ class _DashBoardState extends State<DashBoard> {
                                       title: category[2],
                                       routename: "/Edit_doc",
                                         ), */
-                                          AdminCard('add_category', 'Add gory',
-                                              '/Add_category'),
+                                          AdminCard('add_category',
+                                              'Add category', '/Add_category'),
                                           SizedBox(height: 20),
                                           AdminCard(
                                               'add_doc',
