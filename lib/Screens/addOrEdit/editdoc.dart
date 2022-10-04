@@ -225,7 +225,8 @@ class _EditDocState extends State<EditDoc> {
               child: CircularProgressIndicator(),
             );
           });
-    } else
+    } else {
       return null;
+    }
   }
 }
