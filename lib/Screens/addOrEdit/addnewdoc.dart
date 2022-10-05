@@ -27,8 +27,8 @@ class AddnewDoc extends StatelessWidget {
                 color: Colors.white.withOpacity(0.7),
                 child: Container(
                   padding: const EdgeInsets.all(15),
-                  //height: 400,
-                  width: size.width * 0.35,
+                  width:
+                      size.width < 1000 ? size.width * 0.90 : size.width * 0.40,
                   child: Form(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -71,7 +71,7 @@ class AddnewDoc extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              flex: 5,
+                              flex: 7,
                               child: Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: CustomDecoration
@@ -97,43 +97,41 @@ class AddnewDoc extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 10),
-                            Expanded(
-                              child: Container(
-                                height: 60,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Colors.purple,
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Flexible(
-                                      child: Text(
-                                    'Add',
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.white),
-                                  )),
-                                ),
+                            const CircleAvatar(
+                              radius: 30,
+                              /*   height: 60,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: Colors.purple,
+                              ), */
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: FittedBox(
+                                    child: Text(
+                                  'Add',
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.white),
+                                )),
                               ),
                             ),
                             const SizedBox(width: 10),
-                            Expanded(
-                              child: Container(
-                                height: 60,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Colors.purple,
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Flexible(
-                                      child: Text(
-                                    'Choose',
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.white),
-                                  )),
-                                ),
+                            const CircleAvatar(
+                              radius: 30,
+                              /*  height: 60,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: Colors.purple,
+                              ), */
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: FittedBox(
+                                    child: Text(
+                                  'Choose',
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.white),
+                                )),
                               ),
                             ),
                           ],
