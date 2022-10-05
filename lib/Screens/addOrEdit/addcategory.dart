@@ -83,6 +83,7 @@ class _AddCategoryState extends State<AddCategory> {
                                     const SizedBox(
                                       width: 10,
                                     ),
+<<<<<<< HEAD
                                     CircleAvatar(
                                       radius: 30,
                                       backgroundColor: Colors.white,
@@ -96,8 +97,25 @@ class _AddCategoryState extends State<AddCategory> {
                                         radius: 30,
                                       ),
                                     ),
+=======
+                                    Container(
+                                        height: 50,
+                                        width: 50,
+                                        child: _pickedimage == null
+                                            ? Image.asset(
+                                                "assets/images/add-image.png")
+                                            : kIsWeb
+                                                ? Image.memory(webImage)
+                                                : Image.file(_pickedimage!)),
+>>>>>>> d0ee4e98e9492e47068af751f668025ccb2f914f
                                     const SizedBox(
                                       width: 30,
+                                    ),
+                                    Text(_pickedimage == null
+                                        ? "File not Selected"
+                                        : _pickedimage!.toString()),
+                                    SizedBox(
+                                      width: 10,
                                     ),
                                     TextButton(
                                       child: const Text("Select Icon"),
@@ -201,6 +219,7 @@ class _AddCategoryState extends State<AddCategory> {
                                   const SizedBox(
                                     width: 10,
                                   ),
+<<<<<<< HEAD
                                   CircleAvatar(
                                     radius: 30,
                                     backgroundColor: Colors.white,
@@ -214,8 +233,25 @@ class _AddCategoryState extends State<AddCategory> {
                                       radius: 30,
                                     ),
                                   ),
+=======
+                                  Container(
+                                      height: 50,
+                                      width: 50,
+                                      child: _pickedimage == null
+                                          ? Image.asset(
+                                              "assets/images/add-image.png")
+                                          : kIsWeb
+                                              ? Image.memory(webImage)
+                                              : Image.file(_pickedimage!)),
+>>>>>>> d0ee4e98e9492e47068af751f668025ccb2f914f
                                   const SizedBox(
                                     width: 30,
+                                  ),
+                                  Text(_pickedimage == null
+                                      ? "File not Selected"
+                                      : _pickedimage!.toString()),
+                                  SizedBox(
+                                    width: 10,
                                   ),
                                   TextButton(
                                     child: const Text("Select Icon"),
@@ -254,6 +290,7 @@ class _AddCategoryState extends State<AddCategory> {
     );
   }
 
+<<<<<<< HEAD
   Future selectFile() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
     if (result == null) return;
@@ -264,6 +301,37 @@ class _AddCategoryState extends State<AddCategory> {
         imageFile = File(pickedFile!.path!);
       }
     });
+=======
+  Future selectfilefromweb() async {
+    if (!kIsWeb) {
+      final ImagePicker _picker = ImagePicker();
+      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        var selected = File(image.path);
+        setState(() {
+          _pickedimage = selected;
+        });
+      } else {
+        print("no image has been picked");
+      }
+    } else if (kIsWeb) {
+      final ImagePicker _picker = ImagePicker();
+      XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+      );
+      if (image != null) {
+        var f = await image.readAsBytes();
+        setState(() {
+          webImage = f;
+          _pickedimage = File(image.name);
+        });
+      } else {
+        print("no image has been picked");
+      }
+    } else {
+      print('something went wrong');
+    }
+>>>>>>> d0ee4e98e9492e47068af751f668025ccb2f914f
   }
 
   Future<dynamic>? progressIndicater(BuildContext context, showLoading) {
