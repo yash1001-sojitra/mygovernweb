@@ -1,9 +1,24 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:mygovernweb/Logic/provider/categorydata_provider.dart';
 import 'package:mygovernweb/Route/routes.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await Firebase.initializeApp();
+
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider.value(
+        value: CategoryDataProvider(),
+      ),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {

@@ -1,7 +1,9 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
-
+import 'package:mygovernweb/Logic/provider/categorydata_provider.dart';
+import 'package:provider/provider.dart';
 import '../../Logic/widgets/decoration.dart';
 
 class AddCategory extends StatefulWidget {
@@ -15,8 +17,10 @@ class _AddCategoryState extends State<AddCategory> {
   late File imageFile;
   PlatformFile? pickedFile;
   bool showLoading = false;
+
   @override
   Widget build(BuildContext context) {
+    final CategorydataProvider = Provider.of<CategoryDataProvider>(context);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -61,6 +65,10 @@ class _AddCategoryState extends State<AddCategory> {
                                 decoration: CustomDecoration
                                     .containerCornerRadiusDecoration,
                                 child: TextFormField(
+                                  onChanged: (value) {
+                                    CategorydataProvider.changeCategoryName(
+                                        value);
+                                  },
                                   decoration:
                                       CustomDecoration.textFormFieldDecoration(
                                           "Category Name"),
@@ -105,7 +113,28 @@ class _AddCategoryState extends State<AddCategory> {
                               ),
                               const SizedBox(height: 20),
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () async {
+                                  setState(() {
+                                    showLoading = true;
+                                  });
+                                  progressIndicater(
+                                      context, showLoading = true);
+                                  final ref = FirebaseStorage.instance
+                                      .ref()
+                                      .child('url')
+                                      .child(pickedFile!.name.toString());
+                                  await ref.putFile(imageFile);
+                                  String url = await ref.getDownloadURL();
+                                  CategorydataProvider.changeUrl(url);
+                                  CategorydataProvider.changetime(
+                                      DateTime.now());
+                                  CategorydataProvider.saveCategoryData();
+
+                                  setState(() {
+                                    showLoading = false;
+                                  });
+                                  Navigator.pop(context);
+                                },
                                 child: Container(
                                   height: 50,
                                   decoration: BoxDecoration(

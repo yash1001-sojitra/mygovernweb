@@ -40,6 +40,8 @@ dependencies:
   flutter_svg: ^1.0.3
   firebase_auth: ^3.3.20
   shared_preferences: ^2.0.15
+  provider: ^6.0.3
+  uuid: ^3.0.6
   cloud_firestore: ^3.1.18
   firebase_storage: ^10.2.18
   fluro: ^2.0.3
