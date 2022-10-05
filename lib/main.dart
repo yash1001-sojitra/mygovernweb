@@ -16,28 +16,29 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   runApp(
-      // const MyApp()
-      MultiProvider(
-    providers: [
-      StreamProvider.value(
-        value: UserDataFirestoreService().getUserData(),
-        initialData: null,
-      ),
-      ChangeNotifierProvider.value(
-        value: UsereDataProvider(),
-      ),
-      Provider<AuthService>(
-        create: (_) => AuthService(),
-      ),
-      Provider<UserDataFirestoreService>(
-        create: (_) => UserDataFirestoreService(),
-      ),
-      ChangeNotifierProvider.value(
-        value: CategoryDataProvider(),
-      ),
-    ],
-    child: const MyApp(),
-  ));
+    // const MyApp()
+    MultiProvider(
+      providers: [
+        StreamProvider.value(
+          value: UserDataFirestoreService().getUserData(),
+          initialData: null,
+        ),
+        ChangeNotifierProvider.value(
+          value: UsereDataProvider(),
+        ),
+        Provider<AuthService>(
+          create: (_) => AuthService(),
+        ),
+        Provider<UserDataFirestoreService>(
+          create: (_) => UserDataFirestoreService(),
+        ),
+        ChangeNotifierProvider.value(
+          value: CategoryDataProvider(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {

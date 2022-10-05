@@ -2,6 +2,7 @@
 
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:mygovernweb/Screens/Authentication/forgotpass.dart';
 import 'package:mygovernweb/Screens/Authentication/signup.dart';
 import 'package:mygovernweb/Screens/HomeScreen/adminpanel.dart';
 
@@ -15,6 +16,9 @@ class Flurorouter {
   static Handler _signUpHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, dynamic> params) =>
           SignUpScreen());
+  static Handler _ForgotpassHandler = Handler(
+      handlerFunc: (BuildContext? context, Map<String, dynamic> params) =>
+          ForgotpassScreen());
   static Handler _HomescreenHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, dynamic> params) =>
           DashBoard());
@@ -32,6 +36,8 @@ class Flurorouter {
   static void setUpRouter() {
     router.define('/',
         handler: _signUpHandler, transitionType: TransitionType.fadeIn);
+    router.define('/forgotpass',
+        handler: _ForgotpassHandler, transitionType: TransitionType.fadeIn);
     router.define('/home',
         handler: _HomescreenHandler, transitionType: TransitionType.fadeIn);
     router.define('/Add_category',

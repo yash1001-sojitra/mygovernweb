@@ -54,6 +54,7 @@ dependencies:
   file_picker: 
   mime_type: ^1.0.0
   rflutter_alert: null
+  email_validator: ^2.1.16
 
   
 dev_dependencies:

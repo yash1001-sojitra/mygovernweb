@@ -68,11 +68,12 @@ class _SignUpFormState extends State<SignUpForm> {
   bool ispasswordvisible = true;
   final _form = GlobalKey<FormState>();
 
+  bool _isValid = false;
+
   void _saveForm() {
-    final isValid = _form.currentState?.validate();
-    if (!isValid!) {
-      return;
-    }
+    setState(() {
+      _isValid = _form.currentState!.validate();
+    });
   }
 
   final emailController = TextEditingController();
@@ -133,6 +134,19 @@ class _SignUpFormState extends State<SignUpForm> {
                                   : userDataProvider.changeEmail(value);
                             },
                             controller: emailController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'This field is required';
+                              }
+
+                              // using regular expression
+                              if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
+                                return "Please enter a valid email address";
+                              }
+
+                              // the email is valid
+                              return null;
+                            },
                             decoration: const InputDecoration(
                                 icon: Icon(Icons.alternate_email_outlined),
                                 labelText: "Email",
@@ -194,18 +208,20 @@ class _SignUpFormState extends State<SignUpForm> {
                             Navigator.pop(context);
                           } else {
                             _saveForm();
-                            setState(() {
-                              showLoading = true;
-                            });
-                            progressIndicater(context, showLoading = true);
-                            FireBaseUser? user = await createUser();
-                            userDataProvider.changeId(user!.uid);
-                            userDataProvider.saveUserData();
-                            showAlert == true
-                                ? null
-                                : progressIndicater(
-                                    context, showLoading = true);
-                            Navigator.pop(context);
+                            if (_isValid) {
+                              setState(() {
+                                showLoading = true;
+                              });
+                              progressIndicater(context, showLoading = true);
+                              FireBaseUser? user = await createUser();
+                              userDataProvider.changeId(user!.uid);
+                              userDataProvider.saveUserData();
+                              showAlert == true
+                                  ? null
+                                  : progressIndicater(
+                                      context, showLoading = true);
+                              Navigator.pop(context);
+                            }
                           }
 
                           Get.toNamed('/home');
@@ -228,7 +244,12 @@ class _SignUpFormState extends State<SignUpForm> {
                         label: const Text("Google SignIn"),
                       ),
                       const SizedBox(height: 20),
-                      if (_isLogin) const Text("Forgot Password?"),
+                      if (_isLogin)
+                        GestureDetector(
+                            onTap: () {
+                              Get.toNamed('/forgotpass');
+                            },
+                            child: const Text("Forgot Password?")),
                       const SizedBox(height: 20),
                       InkWell(
                         onTap: () {
