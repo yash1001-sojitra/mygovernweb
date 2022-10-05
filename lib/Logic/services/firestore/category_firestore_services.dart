@@ -13,6 +13,13 @@ class CategoryDataFirestoreService {
         .set(categoryData.createMap());
   }
 
+  Stream<List<CategoryData>> getAnimalData() {
+    return _db.collection('Category').snapshots().map((snapshot) => snapshot
+        .docs
+        .map((document) => CategoryData.fromFirestore(document.data()))
+        .toList());
+  }
+
   Future<void> removeCategory(String categoryDocId) {
     return _db.collection('Category').doc(categoryDocId).delete();
   }

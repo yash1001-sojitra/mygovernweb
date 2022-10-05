@@ -39,7 +39,7 @@ class CategoryDataProvider with ChangeNotifier {
     service.saveCategoryData(newcategoryData);
   }
 
-  void deleteAnimalData(AnimalId) {
-    service.removeCategory(AnimalId);
+  void deleteCategorylData(categoryId) {
+    service.removeCategory(categoryId);
   }
 }
