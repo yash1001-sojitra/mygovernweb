@@ -207,7 +207,7 @@ class _SignUpFormState extends State<SignUpForm> {
                                     context, showLoading = false);
 
                             Get.offAllNamed('/home');
-                            Get.reset();
+                            // Get.reset();
                           } else {
                             setState(() {
                               showLoading = true;
@@ -278,7 +278,6 @@ class _SignUpFormState extends State<SignUpForm> {
       ),
     );
   }
-
 
   Future<dynamic>? progressIndicater(BuildContext context, showLoading) {
     if (showLoading == true) {

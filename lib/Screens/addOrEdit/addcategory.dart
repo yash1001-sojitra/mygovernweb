@@ -1,7 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mygovernweb/Logic/provider/categorydata_provider.dart';
 import 'package:provider/provider.dart';
 import '../../Logic/widgets/decoration.dart';
@@ -14,13 +18,14 @@ class AddCategory extends StatefulWidget {
 }
 
 class _AddCategoryState extends State<AddCategory> {
-  late File imageFile;
+  File? _pickedimage;
   PlatformFile? pickedFile;
   bool showLoading = false;
+  Uint8List webImage = Uint8List(8);
 
   @override
   Widget build(BuildContext context) {
-    // final CategorydataProvider = Provider.of<CategoryDataProvider>(context);
+    final CategorydataProvider = Provider.of<CategoryDataProvider>(context);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -66,8 +71,8 @@ class _AddCategoryState extends State<AddCategory> {
                                     .containerCornerRadiusDecoration,
                                 child: TextFormField(
                                   onChanged: (value) {
-                                    // CategorydataProvider.changeCategoryName(
-                                    //     value);
+                                    CategorydataProvider.changeCategoryName(
+                                        value);
                                   },
                                   decoration:
                                       CustomDecoration.textFormFieldDecoration(
@@ -86,26 +91,37 @@ class _AddCategoryState extends State<AddCategory> {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    CircleAvatar(
-                                      radius: 30,
-                                      backgroundColor: Colors.white,
-                                      child: CircleAvatar(
-                                        backgroundImage: pickedFile != null
-                                            ? FileImage(
-                                                (File("${pickedFile!.path}")))
-                                            : const AssetImage(
-                                                    "assets/images/add-image.jpg")
-                                                as ImageProvider,
-                                        radius: 30,
-                                      ),
-                                    ),
+                                    // CircleAvatar(
+                                    //   radius: 30,
+                                    //   backgroundColor: Colors.white,
+                                    //   child: CircleAvatar(
+                                    //     backgroundImage: pickedFile != null
+                                    //         ? FileImage(
+                                    //             (File("${pickedFile!.path}")))
+                                    //         : const AssetImage(
+                                    //                 "assets/images/add-image.jpg")
+                                    //             as ImageProvider,
+                                    //     radius: 30,
+                                    //   ),
+                                    // ),
+
+                                    Container(
+                                        height: 50,
+                                        width: 50,
+                                        child: _pickedimage == null
+                                            ? Image.asset(
+                                                "assets/images/add-image.jpg")
+                                            : kIsWeb
+                                                ? Image.memory(webImage)
+                                                : Image.file(_pickedimage!)),
                                     const SizedBox(
                                       width: 30,
                                     ),
                                     TextButton(
                                       child: const Text("Select Icon"),
                                       onPressed: () {
-                                        selectFile();
+                                        // selectFileweb();
+                                        selectfilefromweb();
                                       },
                                     )
                                   ],
@@ -114,26 +130,34 @@ class _AddCategoryState extends State<AddCategory> {
                               const SizedBox(height: 20),
                               GestureDetector(
                                 onTap: () async {
-                                  // setState(() {
-                                  //   showLoading = true;
-                                  // });
-                                  // progressIndicater(
-                                  //     context, showLoading = true);
-                                  // final ref = FirebaseStorage.instance
-                                  //     .ref()
-                                  //     .child('url')
-                                  //     .child(pickedFile!.name.toString());
-                                  // await ref.putFile(imageFile);
-                                  // String url = await ref.getDownloadURL();
-                                  // CategorydataProvider.changeUrl(url);
-                                  // CategorydataProvider.changetime(
-                                  //     DateTime.now());
-                                  // CategorydataProvider.saveCategoryData();
+                                  setState(() {
+                                    showLoading = true;
+                                  });
+                                  progressIndicater(
+                                      context, showLoading = true);
+                                  if (_pickedimage == null) {
+                                    String url =
+                                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxhtmBqlJilp6X2q2XsYxJ9DVYb_F8x17DjIOJcHtT&s";
+                                    CategorydataProvider.changeUrl(url);
+                                  } else {
+                                    final ref = FirebaseStorage.instance
+                                        .ref()
+                                        .child('url')
+                                        .child(_pickedimage!.path.toString());
+                                    await ref.putData(webImage);
 
-                                  // setState(() {
-                                  //   showLoading = false;
-                                  // });
-                                  // Navigator.pop(context);
+                                    String url = await ref.getDownloadURL();
+                                    CategorydataProvider.changeUrl(url);
+                                  }
+
+                                  CategorydataProvider.changetime(
+                                      DateTime.now());
+                                  CategorydataProvider.saveCategoryData();
+
+                                  setState(() {
+                                    showLoading = false;
+                                  });
+                                  Navigator.pop(context);
                                 },
                                 child: Container(
                                   height: 50,
@@ -187,6 +211,10 @@ class _AddCategoryState extends State<AddCategory> {
                               decoration: CustomDecoration
                                   .containerCornerRadiusDecoration,
                               child: TextFormField(
+                                onChanged: (value) {
+                                  CategorydataProvider.changeCategoryName(
+                                      value);
+                                },
                                 decoration:
                                     CustomDecoration.textFormFieldDecoration(
                                         "Category Name"),
@@ -204,26 +232,37 @@ class _AddCategoryState extends State<AddCategory> {
                                   const SizedBox(
                                     width: 10,
                                   ),
-                                  CircleAvatar(
-                                    radius: 30,
-                                    backgroundColor: Colors.white,
-                                    child: CircleAvatar(
-                                      backgroundImage: pickedFile != null
-                                          ? FileImage(
-                                              (File("${pickedFile!.path}")))
-                                          : const AssetImage(
-                                                  "assets/images/add-image.jpg")
-                                              as ImageProvider,
-                                      radius: 30,
-                                    ),
-                                  ),
+                                  // CircleAvatar(
+                                  //   radius: 30,
+                                  //   backgroundColor: Colors.white,
+                                  //   child: CircleAvatar(
+                                  //     backgroundImage: pickedFile != null
+                                  //         ? FileImage(
+                                  //             (File("${pickedFile!.path}")))
+                                  //         : const AssetImage(
+                                  //                 "assets/images/add-image.jpg")
+                                  //             as ImageProvider,
+                                  //     radius: 30,
+                                  //   ),
+                                  // ),
+
+                                  Container(
+                                      height: 50,
+                                      width: 50,
+                                      child: _pickedimage == null
+                                          ? Image.asset(
+                                              "assets/images/add-image.jpg")
+                                          : kIsWeb
+                                              ? Image.memory(webImage)
+                                              : Image.file(_pickedimage!)),
                                   const SizedBox(
                                     width: 30,
                                   ),
                                   TextButton(
                                     child: const Text("Select Icon"),
                                     onPressed: () {
-                                      selectFile();
+                                      // selectFileweb();
+                                      selectfilefromweb();
                                     },
                                   )
                                 ],
@@ -231,7 +270,34 @@ class _AddCategoryState extends State<AddCategory> {
                             ),
                             const SizedBox(height: 20),
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () async {
+                                setState(() {
+                                  showLoading = true;
+                                });
+                                progressIndicater(context, showLoading = true);
+                                if (_pickedimage == null) {
+                                  String url =
+                                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxhtmBqlJilp6X2q2XsYxJ9DVYb_F8x17DjIOJcHtT&s";
+                                  CategorydataProvider.changeUrl(url);
+                                } else {
+                                  final ref = FirebaseStorage.instance
+                                      .ref()
+                                      .child('url')
+                                      .child(_pickedimage!.path.toString());
+                                  await ref.putData(webImage);
+
+                                  String url = await ref.getDownloadURL();
+                                  CategorydataProvider.changeUrl(url);
+                                }
+
+                                CategorydataProvider.changetime(DateTime.now());
+                                CategorydataProvider.saveCategoryData();
+
+                                setState(() {
+                                  showLoading = false;
+                                });
+                                Navigator.pop(context);
+                              },
                               child: Container(
                                 height: 50,
                                 decoration: BoxDecoration(
@@ -251,23 +317,75 @@ class _AddCategoryState extends State<AddCategory> {
                       ),
                     ),
                   ),
-                )
+                ),
         ],
       ),
     );
   }
 
-  Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.image);
-    if (result == null) return;
-    setState(() {
-      pickedFile = result.files.first;
+  // Future selectFile() async {
+  //   final result = await FilePicker.platform.pickFiles(type: FileType.image);
+  //   if (result == null) return;
+  //   setState(() {
+  //     pickedFile = result.files.first.bytes as PlatformFile?;
 
-      if (pickedFile != null) {
-        imageFile = File(pickedFile!.path!);
+  //     if (pickedFile != null) {
+  //       imageFile = File(pickedFile!.path!);
+  //     }
+  //   });
+  // }
+
+  Future selectfilefromweb() async {
+    if (!kIsWeb) {
+      final ImagePicker _picker = ImagePicker();
+      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        var selected = File(image.path);
+        setState(() {
+          _pickedimage = selected;
+        });
+      } else {
+        print("no image has been picked");
       }
-    });
+    } else if (kIsWeb) {
+      final ImagePicker _picker = ImagePicker();
+      XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+      );
+      if (image != null) {
+        var f = await image.readAsBytes();
+        setState(() {
+          webImage = f;
+          _pickedimage = File(image.name.toString());
+        });
+      } else {
+        print("no image has been picked");
+      }
+    } else {
+      print('something went wrong');
+    }
   }
+
+  // Future selectFileweb() async {
+  //   FilePickerResult? result =
+  //       await FilePicker.platform.pickFiles(type: FileType.image);
+  //   setState(() {
+  //     if (result != null) {
+  //       Uint8List? fileBytes = result.files.first.bytes;
+  //       String fileName = result.files.first.name;
+  //       pickedFile = result.files.first.bytes as PlatformFile?;
+  //     }
+  //   });
+  // if (result != null) {
+  //   Uint8List? fileBytes = result.files.first.bytes;
+  //   String fileName = result.files.first.name;
+
+  // Upload file
+  // await FirebaseStorage.instance
+  //     .ref('uploads/$fileName')
+  //     .putData(fileBytes!);
+  // }
+  // }
 
   Future<dynamic>? progressIndicater(BuildContext context, showLoading) {
     if (showLoading == true) {
