@@ -91,31 +91,23 @@ class _AddCategoryState extends State<AddCategory> {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    // CircleAvatar(
-                                    //   radius: 30,
-                                    //   backgroundColor: Colors.white,
-                                    //   child: CircleAvatar(
-                                    //     backgroundImage: pickedFile != null
-                                    //         ? FileImage(
-                                    //             (File("${pickedFile!.path}")))
-                                    //         : const AssetImage(
-                                    //                 "assets/images/add-image.jpg")
-                                    //             as ImageProvider,
-                                    //     radius: 30,
-                                    //   ),
-                                    // ),
-
                                     Container(
                                         height: 50,
                                         width: 50,
                                         child: _pickedimage == null
                                             ? Image.asset(
-                                                "assets/images/add-image.jpg")
+                                                "assets/images/add-image.png")
                                             : kIsWeb
                                                 ? Image.memory(webImage)
                                                 : Image.file(_pickedimage!)),
                                     const SizedBox(
                                       width: 30,
+                                    ),
+                                    Text(_pickedimage == null
+                                        ? "File not Selected"
+                                        : _pickedimage!.toString()),
+                                    SizedBox(
+                                      width: 10,
                                     ),
                                     TextButton(
                                       child: const Text("Select Icon"),
@@ -232,31 +224,23 @@ class _AddCategoryState extends State<AddCategory> {
                                   const SizedBox(
                                     width: 10,
                                   ),
-                                  // CircleAvatar(
-                                  //   radius: 30,
-                                  //   backgroundColor: Colors.white,
-                                  //   child: CircleAvatar(
-                                  //     backgroundImage: pickedFile != null
-                                  //         ? FileImage(
-                                  //             (File("${pickedFile!.path}")))
-                                  //         : const AssetImage(
-                                  //                 "assets/images/add-image.jpg")
-                                  //             as ImageProvider,
-                                  //     radius: 30,
-                                  //   ),
-                                  // ),
-
                                   Container(
                                       height: 50,
                                       width: 50,
                                       child: _pickedimage == null
                                           ? Image.asset(
-                                              "assets/images/add-image.jpg")
+                                              "assets/images/add-image.png")
                                           : kIsWeb
                                               ? Image.memory(webImage)
                                               : Image.file(_pickedimage!)),
                                   const SizedBox(
                                     width: 30,
+                                  ),
+                                  Text(_pickedimage == null
+                                      ? "File not Selected"
+                                      : _pickedimage!.toString()),
+                                  SizedBox(
+                                    width: 10,
                                   ),
                                   TextButton(
                                     child: const Text("Select Icon"),
@@ -323,18 +307,6 @@ class _AddCategoryState extends State<AddCategory> {
     );
   }
 
-  // Future selectFile() async {
-  //   final result = await FilePicker.platform.pickFiles(type: FileType.image);
-  //   if (result == null) return;
-  //   setState(() {
-  //     pickedFile = result.files.first.bytes as PlatformFile?;
-
-  //     if (pickedFile != null) {
-  //       imageFile = File(pickedFile!.path!);
-  //     }
-  //   });
-  // }
-
   Future selectfilefromweb() async {
     if (!kIsWeb) {
       final ImagePicker _picker = ImagePicker();
@@ -356,7 +328,7 @@ class _AddCategoryState extends State<AddCategory> {
         var f = await image.readAsBytes();
         setState(() {
           webImage = f;
-          _pickedimage = File(image.name.toString());
+          _pickedimage = File(image.name);
         });
       } else {
         print("no image has been picked");
@@ -365,27 +337,6 @@ class _AddCategoryState extends State<AddCategory> {
       print('something went wrong');
     }
   }
-
-  // Future selectFileweb() async {
-  //   FilePickerResult? result =
-  //       await FilePicker.platform.pickFiles(type: FileType.image);
-  //   setState(() {
-  //     if (result != null) {
-  //       Uint8List? fileBytes = result.files.first.bytes;
-  //       String fileName = result.files.first.name;
-  //       pickedFile = result.files.first.bytes as PlatformFile?;
-  //     }
-  //   });
-  // if (result != null) {
-  //   Uint8List? fileBytes = result.files.first.bytes;
-  //   String fileName = result.files.first.name;
-
-  // Upload file
-  // await FirebaseStorage.instance
-  //     .ref('uploads/$fileName')
-  //     .putData(fileBytes!);
-  // }
-  // }
 
   Future<dynamic>? progressIndicater(BuildContext context, showLoading) {
     if (showLoading == true) {
