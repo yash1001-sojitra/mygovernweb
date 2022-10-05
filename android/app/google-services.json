@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "590829195176",
+    "project_id": "mygovern-b2fbb",
+    "storage_bucket": "mygovern-b2fbb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590829195176:android:96712954c564e6faa9979d",
+        "android_client_info": {
+          "package_name": "com.example.mygovern"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "590829195176-l12schbfr2phquu751mcjokmql9dh4l4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mygovern",
+            "certificate_hash": "41434313e07064906c098989e4337bfa1932e76f"
+          }
+        },
+        {
+          "client_id": "590829195176-4cb64el9d7oovfmn2bvc4jtgedq438av.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuMBOCvc67AGXnwUGKjld6z1crCaLBFhA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "590829195176-4cb64el9d7oovfmn2bvc4jtgedq438av.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

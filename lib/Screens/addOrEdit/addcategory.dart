@@ -1,9 +1,6 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
-import 'package:mygovernweb/Logic/provider/categorydata_provider.dart';
-import 'package:provider/provider.dart';
 import '../../Logic/widgets/decoration.dart';
 
 class AddCategory extends StatefulWidget {
@@ -278,7 +275,8 @@ class _AddCategoryState extends State<AddCategory> {
               child: CircularProgressIndicator(),
             );
           });
-    } else
+    } else {
       return null;
+    }
   }
 }

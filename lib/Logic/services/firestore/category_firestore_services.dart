@@ -13,7 +13,7 @@ class CategoryDataFirestoreService {
         .set(categoryData.createMap());
   }
 
-  Stream<List<CategoryData>> getAnimalData() {
+  Stream<List<CategoryData>> getCategories() {
     return _db.collection('Category').snapshots().map((snapshot) => snapshot
         .docs
         .map((document) => CategoryData.fromFirestore(document.data()))

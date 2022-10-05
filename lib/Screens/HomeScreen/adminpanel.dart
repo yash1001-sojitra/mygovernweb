@@ -132,8 +132,10 @@ class _DashBoardState extends State<DashBoard> {
                                         scrollDirection: Axis.horizontal,
                                         child: Row(
                                           children: const [
-                                            AdminCard('add_category',
-                                                'Add Cegory', '/Add_category'),
+                                            AdminCard(
+                                                'add_category',
+                                                'Add Category',
+                                                '/Add_category'),
                                             SizedBox(width: 20),
                                             AdminCard(
                                                 'add_doc',
