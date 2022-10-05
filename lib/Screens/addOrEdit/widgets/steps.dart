@@ -10,7 +10,7 @@ class Steps extends StatefulWidget {
 }
 
 class _StepsState extends State<Steps> {
-  List<String> documentwidget = ['adhgsafd'];
+  List<String> documentwidget = ['adhgsafd', 'sdkhgjfhasd', 'asdhgjasfd'];
 
   final controller = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -29,40 +29,64 @@ class _StepsState extends State<Steps> {
           ),
           const SizedBox(height: 10),
           const Divider(),
-          ListView.builder(
+          ReorderableListView.builder(
             shrinkWrap: true,
             itemCount: documentwidget.length,
             itemBuilder: ((context, index) {
-              return Container(
-                margin: const EdgeInsets.all(10),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      child: Text('${index + 1}'),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(child: Text(documentwidget[index])),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          documentwidget.removeAt(index);
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: const CircleAvatar(
-                          backgroundColor: Colors.red,
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.white,
+              return Stack(
+                key: UniqueKey(),
+                children: [
+                  Center(
+                    child: Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.all(10),
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            documentwidget.removeAt(index);
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 25),
+                          child: const CircleAvatar(
+                            backgroundColor: Colors.red,
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+                  ReorderableDragStartListener(
+                    index: index,
+                    child: Container(
+                      margin: const EdgeInsets.all(10),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            child: Text('${index + 1}'),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(child: Text(documentwidget[index])),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               );
             }),
+            physics: const BouncingScrollPhysics(),
+            onReorder: (int oldIndex, int newIndex) {
+              setState(() {
+                if (oldIndex < newIndex) {
+                  newIndex -= 1;
+                }
+                final item = documentwidget.removeAt(oldIndex);
+                documentwidget.insert(newIndex, item);
+              });
+            },
           ),
           Container(
             decoration: CustomDecoration.containerCornerRadiusDecoration,
