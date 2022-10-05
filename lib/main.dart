@@ -5,15 +5,20 @@ import 'package:mygovernweb/Logic/provider/categorydata_provider.dart';
 import 'package:mygovernweb/Route/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:url_strategy/url_strategy.dart';
 import 'Logic/provider/userData_provider.dart';
 import 'Logic/services/auth_services/auth_service.dart';
 import 'Logic/services/firestore/user_firestore_services.dart';
+import './Logic/services/firebase_options.dart';
 
-Future<void> main() async {
+void main() async {
+  setPathUrlStrategy();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await Firebase.initializeApp();
 
   runApp(
     // const MyApp()
