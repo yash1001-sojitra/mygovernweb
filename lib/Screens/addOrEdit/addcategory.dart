@@ -19,7 +19,7 @@ class AddCategory extends StatefulWidget {
 
 class _AddCategoryState extends State<AddCategory> {
   File? _pickedimage;
-  late File imageFile;
+  File? imageFile;
   File? PfdFile;
   PlatformFile? pickedFile;
   bool showLoading = false;
@@ -93,49 +93,33 @@ class _AddCategoryState extends State<AddCategory> {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    // Container(
-                                    //     height: 50,
-                                    //     width: 50,
-                                    //     child: pickedFile == null
-                                    //         ? Image.asset(
-                                    //             "assets/images/add-image.png")
-                                    //         : kIsWeb
-                                    //             ? Image.memory(webImage)
-                                    //             : Image.file(_pickedimage!)
-                                    //             ),
                                     Container(
-                                      height: 50,
-                                      width: 50,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        image: DecorationImage(
-                                          image: pickedFile != null
-                                              ? FileImage(
-                                                  (File("${pickedFile!.path}")),
-                                                )
-                                              : const AssetImage(
-                                                      "assets/images/profileimage.png")
-                                                  as ImageProvider,
-                                        ),
-                                      ),
-                                    ),
+                                        height: 50,
+                                        width: 50,
+                                        child: _pickedimage == null
+                                            ? Image.asset(
+                                                "assets/images/add-image.png")
+                                            : kIsWeb
+                                                ? Image.memory(webImage)
+                                                : Image.file(_pickedimage!)),
                                     const SizedBox(
                                       width: 30,
                                     ),
-                                    // Text(_pickedimage == null
-                                    //     ? "File not Selected"
-                                    //     : _pickedimage!.toString()),
-                                    Text(pickedFile == null
-                                        ? "File not Selected"
-                                        : pickedFile!.name.toString()),
+                                    Flexible(
+                                      child: Text(
+                                        _pickedimage == null
+                                            ? "File not Selected"
+                                            : _pickedimage!.toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
                                     SizedBox(
                                       width: 10,
                                     ),
                                     TextButton(
                                       child: const Text("Select Icon"),
                                       onPressed: () {
-                                        selectFile();
-                                        // selectfilefromweb();
+                                        selectfilefromweb();
                                       },
                                     )
                                   ],
@@ -157,8 +141,8 @@ class _AddCategoryState extends State<AddCategory> {
                                     final ref = FirebaseStorage.instance
                                         .ref()
                                         .child('url')
-                                        .child(pickedFile!.path.toString());
-                                    await ref.putFile(imageFile);
+                                        .child(_pickedimage!.path.toString());
+                                    await ref.putData(webImage);
 
                                     String url = await ref.getDownloadURL();
                                     CategorydataProvider.changeUrl(url);
@@ -258,12 +242,9 @@ class _AddCategoryState extends State<AddCategory> {
                                   const SizedBox(
                                     width: 30,
                                   ),
-                                  Text(pickedFile == null
+                                  Text(_pickedimage == null
                                       ? "File not Selected"
-                                      : pickedFile!.toString()),
-                                  // Text(_pickedimage == null
-                                  //     ? "File not Selected"
-                                  //     : _pickedimage!.toString()),
+                                      : _pickedimage!.toString()),
                                   SizedBox(
                                     width: 10,
                                   ),
@@ -271,8 +252,7 @@ class _AddCategoryState extends State<AddCategory> {
                                     child: const Text("Select Icon"),
                                     onPressed: () {
                                       // selectFileweb();
-                                      // selectfilefromweb();
-                                      selectFile();
+                                      selectfilefromweb();
                                     },
                                   )
                                 ],
@@ -331,18 +311,6 @@ class _AddCategoryState extends State<AddCategory> {
         ],
       ),
     );
-  }
-
-  Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.image);
-    if (result == null) return;
-    setState(() {
-      pickedFile = result.files.first;
-
-      if (pickedFile != null) {
-        PfdFile = File(pickedFile!.name.toString());
-      }
-    });
   }
 
   Future selectfilefromweb() async {

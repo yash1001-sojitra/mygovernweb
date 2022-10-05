@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mygovernweb/Screens/addOrEdit/widgets/requireddoc.dart';
 import 'package:mygovernweb/Screens/addOrEdit/widgets/steps.dart';
@@ -18,9 +20,12 @@ class AddnewDoc extends StatefulWidget {
 }
 
 class _AddnewDocState extends State<AddnewDoc> {
-  late File imageFile;
+  File? _pickedimage;
+  File? imageFile;
+  File? PfdFile;
   PlatformFile? pickedFile;
   bool showLoading = false;
+  Uint8List webImage = Uint8List(8);
   CategoryData? _selectedCategory;
   String? _selectedCertificate;
   bool _isAdd = false;
@@ -283,33 +288,34 @@ class _AddnewDocState extends State<AddnewDoc> {
                                           const SizedBox(
                                             width: 10,
                                           ),
-                                          CircleAvatar(
-                                            radius: 30,
-                                            backgroundColor: Colors.white,
-                                            child: CircleAvatar(
-                                              backgroundImage: pickedFile !=
-                                                      null
-                                                  ? FileImage((File(
-                                                      "${pickedFile!.path}")))
-                                                  : const AssetImage(
-                                                          "assets/images/add-image.jpg")
-                                                      as ImageProvider,
-                                              radius: 30,
-                                            ),
-                                          ),
+                                          Container(
+                                              height: 50,
+                                              width: 50,
+                                              child: _pickedimage == null
+                                                  ? Image.asset(
+                                                      "assets/images/add-image.png")
+                                                  : kIsWeb
+                                                      ? Image.memory(webImage)
+                                                      : Image.file(
+                                                          _pickedimage!)),
                                           const SizedBox(
                                             width: 30,
                                           ),
-                                          Text(pickedFile == null
-                                              ? "File not Selected"
-                                              : pickedFile!.name.toString()),
-                                          const SizedBox(
+                                          Flexible(
+                                            child: Text(
+                                              _pickedimage == null
+                                                  ? "File not Selected"
+                                                  : _pickedimage!.toString(),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          SizedBox(
                                             width: 10,
                                           ),
                                           TextButton(
                                             child: const Text("Select Icon"),
                                             onPressed: () {
-                                              selectFile(FileType.image);
+                                              selectfilefromweb();
                                             },
                                           )
                                         ],
@@ -329,24 +335,17 @@ class _AddnewDocState extends State<AddnewDoc> {
                                           const SizedBox(
                                             width: 10,
                                           ),
-                                          CircleAvatar(
-                                              radius: 30,
-                                              backgroundColor: Colors.white,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 5.0),
-                                                child: Image.asset(
-                                                  'assets/images/addpdf.png',
-                                                  height: 40,
-                                                  width: 40,
-                                                ),
-                                              )),
+                                          Container(
+                                              height: 50,
+                                              width: 50,
+                                              child: Image.asset(
+                                                  "assets/images/addpdf.png")),
                                           const SizedBox(
                                             width: 30,
                                           ),
                                           Text(pickedFile == null
                                               ? "File not Selected"
-                                              : pickedFile!.name.toString()),
+                                              : pickedFile!.name),
                                           const SizedBox(
                                             width: 10,
                                           ),
@@ -541,32 +540,34 @@ class _AddnewDocState extends State<AddnewDoc> {
                                         const SizedBox(
                                           width: 10,
                                         ),
-                                        CircleAvatar(
-                                          radius: 30,
-                                          backgroundColor: Colors.white,
-                                          child: CircleAvatar(
-                                            backgroundImage: pickedFile != null
-                                                ? FileImage((File(
-                                                    "${pickedFile!.path}")))
-                                                : const AssetImage(
-                                                        "assets/images/add-image.jpg")
-                                                    as ImageProvider,
-                                            radius: 30,
-                                          ),
-                                        ),
+                                        Container(
+                                            height: 50,
+                                            width: 50,
+                                            child: _pickedimage == null
+                                                ? Image.asset(
+                                                    "assets/images/add-image.png")
+                                                : kIsWeb
+                                                    ? Image.memory(webImage)
+                                                    : Image.file(
+                                                        _pickedimage!)),
                                         const SizedBox(
                                           width: 30,
                                         ),
-                                        Text(pickedFile == null
-                                            ? "File not Selected"
-                                            : pickedFile!.name.toString()),
-                                        const SizedBox(
+                                        Flexible(
+                                          child: Text(
+                                            _pickedimage == null
+                                                ? "File not Selected"
+                                                : _pickedimage!.toString(),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        SizedBox(
                                           width: 10,
                                         ),
                                         TextButton(
                                           child: const Text("Select Icon"),
                                           onPressed: () {
-                                            selectFile(FileType.image);
+                                            selectfilefromweb();
                                           },
                                         )
                                       ],
@@ -586,18 +587,11 @@ class _AddnewDocState extends State<AddnewDoc> {
                                         const SizedBox(
                                           width: 10,
                                         ),
-                                        CircleAvatar(
-                                            radius: 30,
-                                            backgroundColor: Colors.white,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 5.0),
-                                              child: Image.asset(
-                                                'assets/images/addpdf.png',
-                                                height: 40,
-                                                width: 40,
-                                              ),
-                                            )),
+                                        Container(
+                                            height: 50,
+                                            width: 50,
+                                            child: Image.asset(
+                                                "assets/images/addpdf.png")),
                                         const SizedBox(
                                           width: 30,
                                         ),
@@ -657,9 +651,40 @@ class _AddnewDocState extends State<AddnewDoc> {
       pickedFile = result.files.first.bytes as PlatformFile?;
 
       if (pickedFile != null) {
-        imageFile = File(pickedFile!.path!);
+        PfdFile = File(pickedFile!.name.toString());
       }
     });
+  }
+
+  Future selectfilefromweb() async {
+    if (!kIsWeb) {
+      final ImagePicker _picker = ImagePicker();
+      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        var selected = File(image.path);
+        setState(() {
+          _pickedimage = selected;
+        });
+      } else {
+        print("no image has been picked");
+      }
+    } else if (kIsWeb) {
+      final ImagePicker _picker = ImagePicker();
+      XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+      );
+      if (image != null) {
+        var f = await image.readAsBytes();
+        setState(() {
+          webImage = f;
+          _pickedimage = File(image.name);
+        });
+      } else {
+        print("no image has been picked");
+      }
+    } else {
+      print('something went wrong');
+    }
   }
 
   Future<dynamic>? progressIndicater(BuildContext context, showLoading) {
