@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mygovernweb/Logic/widgets/admin_card.dart';
 
 class DashBoard extends StatefulWidget {
@@ -13,7 +15,8 @@ class _DashBoardState extends State<DashBoard> {
   bool isExpanded = false;
   int _selected_index = 0;
   List category = ["Add Category", "Add New Document", "Edit Document"];
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -43,10 +46,15 @@ class _DashBoardState extends State<DashBoard> {
               NavigationRail(
                 // labelType: NavigationRailLabelType.selected,
                 selectedIndex: _selected_index,
-                onDestinationSelected: (int index) {
+                onDestinationSelected: (int index) async {
+                  print(index);
                   setState(() {
                     _selected_index = index;
                   });
+                  if (index == 1) {
+                    _signOut();
+                    Get.toNamed('/');
+                  }
                 },
 
                 extended: isExpanded,
@@ -199,6 +207,11 @@ class _DashBoardState extends State<DashBoard> {
         ]),
       ),
     );
+  }
+
+  Future<void> _signOut() async {
+    await _auth.signOut();
+    await _googleSignIn.signOut();
   }
 }
 

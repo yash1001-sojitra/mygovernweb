@@ -204,27 +204,27 @@ class _SignUpFormState extends State<SignUpForm> {
                             showAlert == true
                                 ? null
                                 : progressIndicater(
+                                    context, showLoading = false);
+
+                            Get.offAllNamed('/home');
+                            Get.reset();
+                          } else {
+                            setState(() {
+                              showLoading = true;
+                            });
+                            progressIndicater(context, showLoading = true);
+                            FireBaseUser? user = await createUser();
+                            userDataProvider.changeId(user!.uid);
+                            userDataProvider.saveUserData();
+                            showAlert == true
+                                ? null
+                                : progressIndicater(
                                     context, showLoading = true);
                             Navigator.pop(context);
-                          } else {
-                            _saveForm();
-                            if (_isValid) {
-                              setState(() {
-                                showLoading = true;
-                              });
-                              progressIndicater(context, showLoading = true);
-                              FireBaseUser? user = await createUser();
-                              userDataProvider.changeId(user!.uid);
-                              userDataProvider.saveUserData();
-                              showAlert == true
-                                  ? null
-                                  : progressIndicater(
-                                      context, showLoading = true);
-                              Navigator.pop(context);
-                            }
+                            emailController.clear();
+                            passwordController.clear();
                           }
-
-                          Get.toNamed('/home');
+                          // Get.toNamed('/home');
                         },
                         icon: const Icon(Icons.login),
                         label: Text(_isLogin ? 'Login' : 'Register'),
@@ -279,6 +279,7 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
+
   Future<dynamic>? progressIndicater(BuildContext context, showLoading) {
     if (showLoading == true) {
       return showDialog(
@@ -301,8 +302,10 @@ class _SignUpFormState extends State<SignUpForm> {
           emailController.text.toString(), passwordController.text.toString());
 
       Navigator.pop(context);
-      // Navigator.pushReplacementNamed(context, singInScreenRoute);
-      Get.toNamed('/home');
+      // Navigator.pushReplacementNamed(context, "/home");
+
+      // Get.toNamed('/home');
+
       return user;
     } catch (e) {
       return alertBox(context, e);
