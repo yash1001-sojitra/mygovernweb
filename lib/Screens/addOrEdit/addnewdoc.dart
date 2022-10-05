@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mygovernweb/Screens/addOrEdit/widgets/requireddoc.dart';
 import 'package:mygovernweb/Screens/addOrEdit/widgets/steps.dart';
 
@@ -193,10 +194,16 @@ class _AddnewDocState extends State<AddnewDoc> {
                                     const SizedBox(
                                       width: 30,
                                     ),
+                                    Text(pickedFile == null
+                                        ? "File not Selected"
+                                        : pickedFile!.name.toString()),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
                                     TextButton(
                                       child: const Text("Select Icon"),
                                       onPressed: () {
-                                        selectFile();
+                                        selectFile(FileType.image);
                                       },
                                     )
                                   ],
@@ -206,9 +213,53 @@ class _AddnewDocState extends State<AddnewDoc> {
                               const RequiredDocument(),
                               const SizedBox(height: 10),
                               const Steps(),
-                              const SizedBox(height: 20),
+                              const SizedBox(height: 10),
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: CustomDecoration
+                                    .containerCornerRadiusDecoration,
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    CircleAvatar(
+                                        radius: 30,
+                                        backgroundColor: Colors.white,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 5.0),
+                                          child: Image.asset(
+                                            'assets/images/addpdf.png',
+                                            height: 40,
+                                            width: 40,
+                                          ),
+                                        )),
+                                    const SizedBox(
+                                      width: 30,
+                                    ),
+                                    Text(pickedFile == null
+                                        ? "File not Selected"
+                                        : pickedFile!.name.toString()),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    TextButton(
+                                      child: const Text("Select Document"),
+                                      onPressed: () {
+                                        selectFile(FileType.any);
+                                      },
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  progressIndicater(context, true);
+                                },
                                 child: Container(
                                   height: 50,
                                   decoration: BoxDecoration(
@@ -389,10 +440,16 @@ class _AddnewDocState extends State<AddnewDoc> {
                                   const SizedBox(
                                     width: 30,
                                   ),
+                                  Text(pickedFile == null
+                                      ? "File not Selected"
+                                      : pickedFile!.name.toString()),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
                                   TextButton(
                                     child: const Text("Select Icon"),
                                     onPressed: () {
-                                      selectFile();
+                                      selectFile(FileType.image);
                                     },
                                   )
                                 ],
@@ -402,9 +459,53 @@ class _AddnewDocState extends State<AddnewDoc> {
                             const RequiredDocument(),
                             const SizedBox(height: 10),
                             const Steps(),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 10),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: CustomDecoration
+                                  .containerCornerRadiusDecoration,
+                              child: Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  CircleAvatar(
+                                      radius: 30,
+                                      backgroundColor: Colors.white,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 5.0),
+                                        child: Image.asset(
+                                          'assets/images/addpdf.png',
+                                          height: 40,
+                                          width: 40,
+                                        ),
+                                      )),
+                                  const SizedBox(
+                                    width: 30,
+                                  ),
+                                  Text(pickedFile == null
+                                      ? "File not Selected"
+                                      : pickedFile!.name.toString()),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  TextButton(
+                                    child: const Text("Select Document"),
+                                    onPressed: () {
+                                      selectFile(FileType.any);
+                                    },
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                progressIndicater(context, true);
+                              },
                               child: Container(
                                 height: 50,
                                 decoration: BoxDecoration(
@@ -430,11 +531,11 @@ class _AddnewDocState extends State<AddnewDoc> {
     );
   }
 
-  Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+  Future selectFile(FileType fileType) async {
+    final result = await FilePicker.platform.pickFiles(type: fileType);
     if (result == null) return;
     setState(() {
-      pickedFile = result.files.first;
+      pickedFile = result.files.first.bytes as PlatformFile?;
 
       if (pickedFile != null) {
         imageFile = File(pickedFile!.path!);
@@ -447,9 +548,11 @@ class _AddnewDocState extends State<AddnewDoc> {
       return showDialog(
           context: context,
           builder: (BuildContext context) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return Center(
+                child: Lottie.asset("assets/animations/lodingtrans.json",
+                    height: 50, width: 50)
+                // CircularProgressIndicator(),
+                );
           });
     } else
       return null;

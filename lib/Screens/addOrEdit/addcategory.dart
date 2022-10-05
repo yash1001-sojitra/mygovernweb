@@ -20,7 +20,7 @@ class _AddCategoryState extends State<AddCategory> {
 
   @override
   Widget build(BuildContext context) {
-    final CategorydataProvider = Provider.of<CategoryDataProvider>(context);
+    // final CategorydataProvider = Provider.of<CategoryDataProvider>(context);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -66,8 +66,8 @@ class _AddCategoryState extends State<AddCategory> {
                                     .containerCornerRadiusDecoration,
                                 child: TextFormField(
                                   onChanged: (value) {
-                                    CategorydataProvider.changeCategoryName(
-                                        value);
+                                    // CategorydataProvider.changeCategoryName(
+                                    //     value);
                                   },
                                   decoration:
                                       CustomDecoration.textFormFieldDecoration(
@@ -114,26 +114,26 @@ class _AddCategoryState extends State<AddCategory> {
                               const SizedBox(height: 20),
                               GestureDetector(
                                 onTap: () async {
-                                  setState(() {
-                                    showLoading = true;
-                                  });
-                                  progressIndicater(
-                                      context, showLoading = true);
-                                  final ref = FirebaseStorage.instance
-                                      .ref()
-                                      .child('url')
-                                      .child(pickedFile!.name.toString());
-                                  await ref.putFile(imageFile);
-                                  String url = await ref.getDownloadURL();
-                                  CategorydataProvider.changeUrl(url);
-                                  CategorydataProvider.changetime(
-                                      DateTime.now());
-                                  CategorydataProvider.saveCategoryData();
+                                  // setState(() {
+                                  //   showLoading = true;
+                                  // });
+                                  // progressIndicater(
+                                  //     context, showLoading = true);
+                                  // final ref = FirebaseStorage.instance
+                                  //     .ref()
+                                  //     .child('url')
+                                  //     .child(pickedFile!.name.toString());
+                                  // await ref.putFile(imageFile);
+                                  // String url = await ref.getDownloadURL();
+                                  // CategorydataProvider.changeUrl(url);
+                                  // CategorydataProvider.changetime(
+                                  //     DateTime.now());
+                                  // CategorydataProvider.saveCategoryData();
 
-                                  setState(() {
-                                    showLoading = false;
-                                  });
-                                  Navigator.pop(context);
+                                  // setState(() {
+                                  //   showLoading = false;
+                                  // });
+                                  // Navigator.pop(context);
                                 },
                                 child: Container(
                                   height: 50,

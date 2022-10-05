@@ -7,18 +7,21 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await Firebase.initializeApp();
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // await Firebase.initializeApp();
 
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider.value(
-        value: CategoryDataProvider(),
-      ),
-    ],
-    child: const MyApp(),
-  ));
+  runApp(
+    const MyApp()
+  //   MultiProvider(
+  //   providers: [
+  //     ChangeNotifierProvider.value(
+  //       value: CategoryDataProvider(),
+  //     ),
+  //   ],
+  //   child: const MyApp(),
+  // )
+  );
 }
 
 class MyApp extends StatefulWidget {
