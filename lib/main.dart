@@ -24,10 +24,10 @@ void main() async {
     // const MyApp()
     MultiProvider(
       providers: [
-        StreamProvider.value(
-          value: UserDataFirestoreService().getUserData(),
-          initialData: null,
-        ),
+        // StreamProvider.value(
+        //   value: UserDataFirestoreService().getUserData(),
+        //   initialData: null,
+        // ),
         ChangeNotifierProvider.value(
           value: UsereDataProvider(),
         ),

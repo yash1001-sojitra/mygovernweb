@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:js_util';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -330,32 +331,76 @@ class _AddnewDocState extends State<AddnewDoc> {
                                       padding: const EdgeInsets.all(10),
                                       decoration: CustomDecoration
                                           .containerCornerRadiusDecoration,
-                                      child: Row(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          const SizedBox(
-                                            width: 10,
+                                          Row(
+                                            children: [
+                                              Container(
+                                                  height: 50,
+                                                  width: 50,
+                                                  child: Image.asset(
+                                                      "assets/images/addpdf.png")),
+                                              SizedBox(
+                                                width: 30,
+                                              ),
+                                              Text(pickedFile == null
+                                                  ? "File not Selected"
+                                                  : pickedFile!.name),
+                                              SizedBox(
+                                                width: 30,
+                                              ),
+                                              TextButton(
+                                                child: const Text(
+                                                    "Select Document"),
+                                                onPressed: () {
+                                                  selectFile(FileType.any);
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                          Row(
+                                            children: const [
+                                              Expanded(
+                                                child: Divider(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                "or",
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Expanded(
+                                                child: Divider(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
                                           ),
                                           Container(
-                                              height: 50,
-                                              width: 50,
-                                              child: Image.asset(
-                                                  "assets/images/addpdf.png")),
-                                          const SizedBox(
-                                            width: 30,
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: CustomDecoration
+                                                .containerCornerRadiusDecoration,
+                                            child: TextFormField(
+                                              decoration: CustomDecoration
+                                                  .textFormFieldDecoration(
+                                                      "Document Url"),
+                                            ),
                                           ),
-                                          Text(pickedFile == null
-                                              ? "File not Selected"
-                                              : pickedFile!.name),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          TextButton(
-                                            child:
-                                                const Text("Select Document"),
-                                            onPressed: () {
-                                              selectFile(FileType.any);
-                                            },
-                                          )
                                         ],
                                       ),
                                     ),
