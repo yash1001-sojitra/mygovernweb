@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -234,6 +235,7 @@ class _SignUpFormState extends State<SignUpForm> {
                             minimumSize: const Size.fromHeight(50)),
                         onPressed: () async {
                           await userDataProvider.signInWithGoogle();
+                          // await GoogleSignIn().signIn();
                           Get.toNamed('/home');
                         },
                         icon: SizedBox(
