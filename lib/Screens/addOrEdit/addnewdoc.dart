@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:js_util';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -40,7 +39,6 @@ class _AddnewDocState extends State<AddnewDoc> {
           stream: CategoryDataFirestoreService().getCategories(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              print(snapshot.connectionState);
               return const Center(
                 child: CircularProgressIndicator(),
               );
@@ -82,190 +80,212 @@ class _AddnewDocState extends State<AddnewDoc> {
                                     ),
                                     StatefulBuilder(
                                         builder: (context, setState) {
-                                      return Container(
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: CustomDecoration
-                                            .containerCornerRadiusDecoration,
-                                        child: DropdownButton<String>(
-                                          onChanged: (val) {
-                                            setState(() {
-                                              _selectedCategory =
-                                                  val as CategoryData;
-                                            });
-                                          },
-                                          value: _selectedCategory?.category,
-                                          items: snapshot.data
-                                              ?.map((e) => e)
-                                              .toSet()
-                                              .toList()
-                                              .map((e) {
-                                            return DropdownMenuItem<String>(
-                                              value: e.category,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(15),
-                                                child: Text(e.category),
-                                              ),
-                                            );
-                                          }).toList(),
-                                          hint: const Text('Category'),
-                                          iconSize: 40,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          underline: Container(),
-                                          isExpanded: true,
-                                          menuMaxHeight: 500,
-                                        ),
-                                      );
-                                    }),
-                                    const SizedBox(height: 10),
-                                    FutureBuilder<
-                                            QuerySnapshot<
-                                                Map<String, dynamic>>>(
-                                        future: _selectedCategory != null
-                                            ? FirebaseFirestore.instance
-                                                .collection('Category')
-                                                .doc(_selectedCategory?.id)
-                                                .collection('Documents')
-                                                .get()
-                                            : null,
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            );
-                                          }
-
-                                          return StatefulBuilder(
-                                              builder: (context, setState) {
-                                            return Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 5,
-                                                  child: Container(
+                                      return Column(
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: CustomDecoration
+                                                .containerCornerRadiusDecoration,
+                                            child: DropdownButton<String>(
+                                              onChanged: (val) {
+                                                setState(() {
+                                                  _selectedCategory = snapshot
+                                                      .data
+                                                      ?.firstWhere((element) =>
+                                                          element.category ==
+                                                          val) as CategoryData;
+                                                });
+                                              },
+                                              value:
+                                                  _selectedCategory?.category,
+                                              items: snapshot.data
+                                                  ?.map((e) => e)
+                                                  .toSet()
+                                                  .map((e) {
+                                                return DropdownMenuItem<String>(
+                                                  value: e.category,
+                                                  child: Padding(
                                                     padding:
                                                         const EdgeInsets.all(
-                                                            10),
-                                                    decoration: CustomDecoration
-                                                        .containerCornerRadiusDecoration,
-                                                    child: _isAdd
-                                                        ? TextFormField(
-                                                            decoration: CustomDecoration
-                                                                .textFormFieldDecoration(
-                                                                    "Certificate Name"),
-                                                          )
-                                                        : DropdownButton<
-                                                            String>(
-                                                            value:
-                                                                _selectedCertificate,
-                                                            onChanged: (val) {
-                                                              setState(() =>
-                                                                  _selectedCertificate =
-                                                                      val);
-                                                            },
-                                                            items: <String>[
-                                                              'A',
-                                                              'B',
-                                                              'C'
-                                                            ].map((e) {
-                                                              return DropdownMenuItem<
-                                                                  String>(
-                                                                value: e,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(15),
-                                                                  child:
-                                                                      Text(e),
-                                                                ),
-                                                              );
-                                                            }).toList(),
-                                                            hint: const Text(
-                                                                'Choose Certificate'),
-                                                            iconSize: 40,
+                                                            15),
+                                                    child: Text(e.category),
+                                                  ),
+                                                );
+                                              }).toList(),
+                                              hint: const Text('Category'),
+                                              iconSize: 40,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              underline: Container(),
+                                              isExpanded: true,
+                                              menuMaxHeight: 500,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          FutureBuilder<
+                                                  QuerySnapshot<
+                                                      Map<String, dynamic>>>(
+                                              future: FirebaseFirestore.instance
+                                                  .collection('Category')
+                                                  .doc(_selectedCategory?.id)
+                                                  .collection('Documents')
+                                                  .get(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return const Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  );
+                                                }
+                                                return Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 5,
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(10),
+                                                        decoration: CustomDecoration
+                                                            .containerCornerRadiusDecoration,
+                                                        child: _isAdd
+                                                            ? TextFormField(
+                                                                decoration: CustomDecoration
+                                                                    .textFormFieldDecoration(
+                                                                        "Certificate Name"),
+                                                              )
+                                                            : DropdownButton<
+                                                                String>(
+                                                                value:
+                                                                    _selectedCertificate,
+                                                                onChanged:
+                                                                    (val) {
+                                                                  setState(() =>
+                                                                      _selectedCertificate =
+                                                                          val);
+                                                                },
+                                                                items: snapshot
+                                                                    .data!.docs
+                                                                    .toSet()
+                                                                    .map((e) {
+                                                                  return DropdownMenuItem<
+                                                                      String>(
+                                                                    value: e.id,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              15),
+                                                                      child: Text(
+                                                                          e.id),
+                                                                    ),
+                                                                  );
+                                                                }).toList(),
+                                                                hint: const Text(
+                                                                    'Choose Certificate'),
+                                                                iconSize: 40,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                underline:
+                                                                    Container(),
+                                                                isExpanded:
+                                                                    true,
+                                                                menuMaxHeight:
+                                                                    500,
+                                                              ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    Expanded(
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          setState((() =>
+                                                              _isAdd = true));
+                                                        },
+                                                        child: Container(
+                                                          height: 60,
+                                                          alignment:
+                                                              Alignment.center,
+                                                          decoration:
+                                                              BoxDecoration(
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .circular(
-                                                                        10),
-                                                            underline:
-                                                                Container(),
-                                                            isExpanded: true,
-                                                            menuMaxHeight: 500,
+                                                                        50),
+                                                            color: Colors
+                                                                .blueAccent,
                                                           ),
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 10),
-                                                Expanded(
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      setState((() =>
-                                                          _isAdd = true));
-                                                    },
-                                                    child: Container(
-                                                      height: 60,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(50),
-                                                        color: Colors.purple,
-                                                      ),
-                                                      child: const Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Flexible(
-                                                            child: Text(
-                                                          'Add',
-                                                          style: TextStyle(
-                                                              fontSize: 17,
-                                                              color:
-                                                                  Colors.white),
-                                                        )),
+                                                          child: const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Flexible(
+                                                                child: Text(
+                                                              'Add',
+                                                              style: TextStyle(
+                                                                  fontSize: 17,
+                                                                  color: Colors
+                                                                      .white),
+                                                            )),
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 10),
-                                                Expanded(
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      setState((() =>
-                                                          _isAdd = false));
-                                                    },
-                                                    child: Container(
-                                                      height: 60,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(50),
-                                                        color: Colors.purple,
+                                                    const SizedBox(width: 10),
+                                                    if (snapshot.data!.size > 0)
+                                                      Expanded(
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            setState((() =>
+                                                                _isAdd =
+                                                                    false));
+                                                          },
+                                                          child: Container(
+                                                            height: 60,
+                                                            alignment: Alignment
+                                                                .center,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50),
+                                                              color: snapshot
+                                                                          .data ==
+                                                                      null
+                                                                  ? Colors.grey
+                                                                  : Colors
+                                                                      .blueAccent,
+                                                            ),
+                                                            child:
+                                                                const Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Flexible(
+                                                                  child: Text(
+                                                                'Choose',
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        17,
+                                                                    color: Colors
+                                                                        .white),
+                                                              )),
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ),
-                                                      child: const Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Flexible(
-                                                            child: Text(
-                                                          'Choose',
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                              fontSize: 17,
-                                                              color:
-                                                                  Colors.white),
-                                                        )),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            );
-                                          });
-                                        }),
+                                                  ],
+                                                );
+                                              }),
+                                        ],
+                                      );
+                                    }),
                                     const SizedBox(height: 10),
                                     Container(
                                       padding: const EdgeInsets.all(10),
@@ -289,7 +309,7 @@ class _AddnewDocState extends State<AddnewDoc> {
                                           const SizedBox(
                                             width: 10,
                                           ),
-                                          Container(
+                                          SizedBox(
                                               height: 50,
                                               width: 50,
                                               child: _pickedimage == null
@@ -310,7 +330,7 @@ class _AddnewDocState extends State<AddnewDoc> {
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 10,
                                           ),
                                           TextButton(
@@ -337,18 +357,18 @@ class _AddnewDocState extends State<AddnewDoc> {
                                         children: [
                                           Row(
                                             children: [
-                                              Container(
+                                              SizedBox(
                                                   height: 50,
                                                   width: 50,
                                                   child: Image.asset(
                                                       "assets/images/addpdf.png")),
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 30,
                                               ),
                                               Text(pickedFile == null
                                                   ? "File not Selected"
                                                   : pickedFile!.name),
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 30,
                                               ),
                                               TextButton(
@@ -378,9 +398,7 @@ class _AddnewDocState extends State<AddnewDoc> {
                                                   fontSize: 16,
                                                 ),
                                               ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
+                                              SizedBox(width: 10),
                                               Expanded(
                                                 child: Divider(
                                                   color: Colors.grey,
@@ -388,13 +406,14 @@ class _AddnewDocState extends State<AddnewDoc> {
                                               ),
                                             ],
                                           ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
+                                          const SizedBox(height: 10),
                                           Container(
                                             padding: const EdgeInsets.all(10),
                                             decoration: CustomDecoration
-                                                .containerCornerRadiusDecoration,
+                                                .containerCornerRadiusDecoration
+                                                .copyWith(
+                                                    border: Border.all(
+                                                        color: Colors.grey)),
                                             child: TextFormField(
                                               decoration: CustomDecoration
                                                   .textFormFieldDecoration(
@@ -656,7 +675,7 @@ class _AddnewDocState extends State<AddnewDoc> {
                                         const SizedBox(
                                           width: 10,
                                         ),
-                                        Container(
+                                        SizedBox(
                                             height: 50,
                                             width: 50,
                                             child: _pickedimage == null
@@ -677,7 +696,7 @@ class _AddnewDocState extends State<AddnewDoc> {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 10,
                                         ),
                                         TextButton(
@@ -758,15 +777,13 @@ class _AddnewDocState extends State<AddnewDoc> {
                                         SizedBox(
                                           height: 10,
                                         ),
-                                        Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: CustomDecoration
-                                              .containerCornerRadiusDecoration,
-                                          child: TextFormField(
-                                            decoration: CustomDecoration
-                                                .textFormFieldDecoration(
-                                                    "Document Url"),
-                                          ),
+                                        SizedBox(
+                                            height: 50,
+                                            width: 50,
+                                            child: Image.asset(
+                                                "assets/images/addpdf.png")),
+                                        const SizedBox(
+                                          width: 30,
                                         ),
                                       ],
                                     ),
@@ -819,8 +836,8 @@ class _AddnewDocState extends State<AddnewDoc> {
 
   Future selectfilefromweb() async {
     if (!kIsWeb) {
-      final ImagePicker _picker = ImagePicker();
-      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      final ImagePicker picker = ImagePicker();
+      XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         var selected = File(image.path);
         setState(() {
@@ -830,8 +847,8 @@ class _AddnewDocState extends State<AddnewDoc> {
         print("no image has been picked");
       }
     } else if (kIsWeb) {
-      final ImagePicker _picker = ImagePicker();
-      XFile? image = await _picker.pickImage(
+      final ImagePicker picker = ImagePicker();
+      XFile? image = await picker.pickImage(
         source: ImageSource.gallery,
       );
       if (image != null) {

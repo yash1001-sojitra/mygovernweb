@@ -10,7 +10,7 @@ class Steps extends StatefulWidget {
 }
 
 class _StepsState extends State<Steps> {
-  List<String> documentwidget = ['adhgsafd', 'sdkhgjfhasd', 'asdhgjasfd'];
+  List<String> documentwidget = [];
 
   final controller = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
