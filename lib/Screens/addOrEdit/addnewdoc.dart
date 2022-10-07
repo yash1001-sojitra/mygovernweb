@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mygovernweb/Screens/addOrEdit/widgets/requireddoc.dart';
 import 'package:mygovernweb/Screens/addOrEdit/widgets/steps.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../Logic/Modules/add_category_model.dart';
 import '../../Logic/services/firestore/category_firestore_services.dart';
@@ -29,6 +30,8 @@ class _AddnewDocState extends State<AddnewDoc> {
   CategoryData? _selectedCategory;
   String? _selectedCertificate;
   bool _isAdd = false;
+  Map<String, dynamic> data = {};
+  List<String> docSteps = [];
 
   @override
   Widget build(BuildContext context) {
@@ -345,7 +348,7 @@ class _AddnewDocState extends State<AddnewDoc> {
                                     const SizedBox(height: 10),
                                     const RequiredDocument(),
                                     const SizedBox(height: 10),
-                                    const Steps(),
+                                    Steps(docSteps),
                                     const SizedBox(height: 10),
                                     Container(
                                       padding: const EdgeInsets.all(10),
@@ -640,7 +643,7 @@ class _AddnewDocState extends State<AddnewDoc> {
                                   const SizedBox(height: 10),
                                   const RequiredDocument(),
                                   const SizedBox(height: 10),
-                                  const Steps(),
+                                  Steps(docSteps),
                                   const SizedBox(height: 10),
                                   Container(
                                     padding: const EdgeInsets.all(10),
@@ -679,7 +682,23 @@ class _AddnewDocState extends State<AddnewDoc> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      progressIndicater(context, true);
+                                      if (_selectedCategory != null ||
+                                          _selectedCertificate != null) {
+                                        progressIndicater(context, true);
+                                        FirebaseFirestore.instance
+                                            .collection('Category')
+                                            .doc(_selectedCategory?.id)
+                                            .collection('Documents')
+                                            .doc(_selectedCertificate)
+                                            .set({
+                                          'Id': const Uuid().v4(),
+                                          'document': _selectedCertificate,
+                                          'steps': docSteps,
+                                          'requiredDoc': 'requ doc',
+                                        });
+
+                                        progressIndicater(context, false);
+                                      }
                                     },
                                     child: Container(
                                       height: 50,

@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import '../../../Logic/widgets/decoration.dart';
 
 class Steps extends StatefulWidget {
-  const Steps({super.key});
+  final List<String> documentwidget;
+  const Steps(this.documentwidget, {super.key});
 
   @override
   State<Steps> createState() => _StepsState();
 }
 
 class _StepsState extends State<Steps> {
-  List<String> documentwidget = [];
+  //List<String> widget.documentwidget = [];
 
   final controller = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -31,7 +32,7 @@ class _StepsState extends State<Steps> {
           const Divider(),
           ReorderableListView.builder(
             shrinkWrap: true,
-            itemCount: documentwidget.length,
+            itemCount: widget.documentwidget.length,
             itemBuilder: ((context, index) {
               return Stack(
                 key: UniqueKey(),
@@ -43,7 +44,7 @@ class _StepsState extends State<Steps> {
                       child: InkWell(
                         onTap: () {
                           setState(() {
-                            documentwidget.removeAt(index);
+                            widget.documentwidget.removeAt(index);
                           });
                         },
                         child: Container(
@@ -69,7 +70,7 @@ class _StepsState extends State<Steps> {
                             child: Text('${index + 1}'),
                           ),
                           const SizedBox(width: 10),
-                          Expanded(child: Text(documentwidget[index])),
+                          Expanded(child: Text(widget.documentwidget[index])),
                         ],
                       ),
                     ),
@@ -83,8 +84,8 @@ class _StepsState extends State<Steps> {
                 if (oldIndex < newIndex) {
                   newIndex -= 1;
                 }
-                final item = documentwidget.removeAt(oldIndex);
-                documentwidget.insert(newIndex, item);
+                final item = widget.documentwidget.removeAt(oldIndex);
+                widget.documentwidget.insert(newIndex, item);
               });
             },
           ),
@@ -110,7 +111,6 @@ class _StepsState extends State<Steps> {
                           border: InputBorder.none,
                         ),
                         validator: (val) {
-                          print('..............');
                           if (val == null || val.isEmpty) {
                             return 'Enter Document Step';
                           }
@@ -125,7 +125,7 @@ class _StepsState extends State<Steps> {
                     _formKey.currentState?.validate();
                     setState(() {
                       if (controller.text.isNotEmpty) {
-                        documentwidget.add(
+                        widget.documentwidget.add(
                           controller.text.trim(),
                         );
                         controller.clear();

@@ -76,7 +76,10 @@ class UsereDataProvider with ChangeNotifier {
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
         } else if (e.code == 'invalid-credential') {}
-      } catch (e) {}
+      } catch (e) {
+        print('.................');
+        print(e.toString());
+      }
     }
   }
 }
