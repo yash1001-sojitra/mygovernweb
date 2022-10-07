@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mygovernweb/Screens/addOrEdit/widgets/requireddoc.dart';
@@ -30,7 +32,7 @@ class _AddnewDocState extends State<AddnewDoc> {
   Uint8List webImage = Uint8List(8);
   CategoryData? _selectedCategory;
   String? _selectedCertificate;
-  bool _isAdd = false;
+  final bool _isAdd = false;
   List<String> docSteps = [];
   List<String> docRequired = [];
 
@@ -41,7 +43,7 @@ class _AddnewDocState extends State<AddnewDoc> {
     return Scaffold(
       body: StreamBuilder<List<CategoryData>>(
           stream: CategoryDataFirestoreService().getCategories(),
-          builder: (context, snapshot) {
+          builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -82,7 +84,7 @@ class _AddnewDocState extends State<AddnewDoc> {
                               const Divider(
                                 height: 40,
                               ),
-                              StatefulBuilder(builder: (context, setState) {
+                              StatefulBuilder(builder: (cntx, setState) {
                                 return Column(
                                   children: [
                                     Container(
@@ -120,148 +122,6 @@ class _AddnewDocState extends State<AddnewDoc> {
                                       ),
                                     ),
                                     const SizedBox(height: 10),
-                                    FutureBuilder<
-                                            QuerySnapshot<
-                                                Map<String, dynamic>>>(
-                                        future: FirebaseFirestore.instance
-                                            .collection('Category')
-                                            .doc(_selectedCategory?.id)
-                                            .collection('Documents')
-                                            .get(),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            );
-                                          }
-                                          return Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 5,
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.all(10),
-                                                  decoration: CustomDecoration
-                                                      .containerCornerRadiusDecoration,
-                                                  child: _isAdd
-                                                      ? TextFormField(
-                                                          controller:
-                                                              _controller,
-                                                          decoration: CustomDecoration
-                                                              .textFormFieldDecoration(
-                                                                  "Certificate Name"),
-                                                        )
-                                                      : DropdownButton<String>(
-                                                          value:
-                                                              _selectedCertificate,
-                                                          onChanged: (val) {
-                                                            setState(() =>
-                                                                _selectedCertificate =
-                                                                    val);
-                                                          },
-                                                          items: snapshot
-                                                              .data!.docs
-                                                              .toSet()
-                                                              .map((e) {
-                                                            return DropdownMenuItem<
-                                                                String>(
-                                                              value: e.id,
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(15),
-                                                                child:
-                                                                    Text(e.id),
-                                                              ),
-                                                            );
-                                                          }).toList(),
-                                                          hint: const Text(
-                                                              'Choose Certificate'),
-                                                          iconSize: 40,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          underline:
-                                                              Container(),
-                                                          isExpanded: true,
-                                                          menuMaxHeight: 500,
-                                                        ),
-                                                ),
-                                              ),
-                                              const SizedBox(width: 10),
-                                              Expanded(
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    setState(
-                                                        (() => _isAdd = true));
-                                                  },
-                                                  child: Container(
-                                                    height: 60,
-                                                    alignment: Alignment.center,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      color: Colors.blueAccent,
-                                                    ),
-                                                    child: const Padding(
-                                                      padding:
-                                                          EdgeInsets.all(8.0),
-                                                      child: Flexible(
-                                                          child: Text(
-                                                        'Add',
-                                                        style: TextStyle(
-                                                            fontSize: 17,
-                                                            color:
-                                                                Colors.white),
-                                                      )),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(width: 10),
-                                              if (snapshot.data!.size > 0)
-                                                Expanded(
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      setState((() =>
-                                                          _isAdd = false));
-                                                    },
-                                                    child: Container(
-                                                      height: 60,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(50),
-                                                        color: snapshot.data ==
-                                                                null
-                                                            ? Colors.grey
-                                                            : Colors.blueAccent,
-                                                      ),
-                                                      child: const Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Flexible(
-                                                            child: Text(
-                                                          'Choose',
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                              fontSize: 17,
-                                                              color:
-                                                                  Colors.white),
-                                                        )),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                            ],
-                                          );
-                                        }),
                                   ],
                                 );
                               }),
@@ -271,6 +131,7 @@ class _AddnewDocState extends State<AddnewDoc> {
                                 decoration: CustomDecoration
                                     .containerCornerRadiusDecoration,
                                 child: TextFormField(
+                                  controller: _controller,
                                   decoration:
                                       CustomDecoration.textFormFieldDecoration(
                                           "Document Name"),
@@ -326,36 +187,74 @@ class _AddnewDocState extends State<AddnewDoc> {
                               Steps(docSteps),
                               const SizedBox(height: 10),
                               GestureDetector(
-                                onTap: () {
-                                  if (_selectedCategory != null ||
-                                      _selectedCertificate != null ||
-                                      docSteps.isNotEmpty ||
-                                      docRequired.isNotEmpty) {
-                                    progressIndicater(context, true);
-                                    FirebaseFirestore.instance
-                                        .collection('Category')
-                                        .doc(_selectedCategory?.id)
-                                        .collection('Documents')
-                                        .doc(_isAdd
-                                            ? _controller.text
-                                            : _selectedCertificate)
-                                        .set({
-                                      'Id': const Uuid().v4(),
-                                      'document': _isAdd
-                                          ? _controller.text
-                                          : _selectedCertificate,
-                                      'steps': docSteps,
-                                      'requiredDoc': docRequired,
-                                    });
-
-                                    progressIndicater(context, false);
-                                  } else {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(
+                                onTap: () async {
+                                  final data = await FirebaseFirestore.instance
+                                      .collection('Category')
+                                      .doc(_selectedCategory?.id)
+                                      .collection('Documents')
+                                      .get();
+                                  final ids =
+                                      data.docs.map((e) => e.id).toList();
+                                  try {
+                                    if (_selectedCategory != null ||
+                                        _controller.text.isNotEmpty ||
+                                        docSteps.isNotEmpty ||
+                                        docRequired.isNotEmpty) {
+                                      if (ids.contains(_controller.text)) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
                                             content: Text(
-                                      'Fill all the details!',
-                                      textAlign: TextAlign.center,
-                                    )));
+                                              'Entered document is already present!',
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                      progressIndicater(context, true);
+                                      final ref = FirebaseStorage.instance
+                                          .ref()
+                                          .child('url')
+                                          .child(_controller.text);
+                                      await ref.putData(webImage);
+                                      String url = await ref.getDownloadURL();
+                                      await FirebaseFirestore.instance
+                                          .collection('Category')
+                                          .doc(_selectedCategory?.id)
+                                          .collection('Documents')
+                                          .doc(_controller.text)
+                                          .set({
+                                        'Id': const Uuid().v4(),
+                                        'document': _controller.text,
+                                        'steps': docSteps,
+                                        'requiredDoc': docRequired,
+                                        'iconUrl': url,
+                                      });
+
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Document Added Successfully!',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      );
+                                      Navigator.pop(context);
+                                      Get.toNamed('/home');
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                              content: Text(
+                                        'Fill all the details!',
+                                        textAlign: TextAlign.center,
+                                      )));
+                                    }
+                                  } catch (e) {
+                                    print(e);
                                   }
                                 },
                                 child: Container(
@@ -428,19 +327,16 @@ class _AddnewDocState extends State<AddnewDoc> {
     }
   }
 
-  Future<dynamic>? progressIndicater(BuildContext context, showLoading) {
-    if (showLoading == true) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Center(
-                child: Lottie.asset("assets/animations/lodingtrans.json",
-                    height: 50, width: 50)
-                // CircularProgressIndicator(),
-                );
-          });
-    } else {
-      return null;
-    }
+  Future progressIndicater(BuildContext context, showLoading) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Center(
+              child: Lottie.asset("assets/animations/lodingtrans.json",
+                  height: 50, width: 50)
+              // CircularProgressIndicator(),
+              );
+        });
   }
 }
