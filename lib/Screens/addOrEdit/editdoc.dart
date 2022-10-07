@@ -172,9 +172,9 @@ class _EditDocState extends State<EditDoc> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const RequiredDocument(),
+                        const RequiredDocument([]),
                         const SizedBox(height: 10),
-                        // Steps(),
+                        const Steps([]),
                         const SizedBox(height: 20),
                         GestureDetector(
                           onTap: () {},

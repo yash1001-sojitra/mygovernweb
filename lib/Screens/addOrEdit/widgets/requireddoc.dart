@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import '../../../Logic/widgets/decoration.dart';
 
 class RequiredDocument extends StatefulWidget {
-  const RequiredDocument({super.key});
+  final List<String> documentwidget;
+  const RequiredDocument(this.documentwidget, {super.key});
 
   @override
   State<RequiredDocument> createState() => _RequiredDocumentState();
 }
 
 class _RequiredDocumentState extends State<RequiredDocument> {
-  List<String> documentwidget = [];
   int i = 0;
   final controller = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -31,7 +31,7 @@ class _RequiredDocumentState extends State<RequiredDocument> {
           const Divider(),
           ListView.builder(
             shrinkWrap: true,
-            itemCount: documentwidget.length,
+            itemCount: widget.documentwidget.length,
             itemBuilder: ((context, index) {
               return Container(
                 key: UniqueKey(),
@@ -46,12 +46,12 @@ class _RequiredDocumentState extends State<RequiredDocument> {
                     Expanded(
                         child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(documentwidget[index]),
+                      child: Text(widget.documentwidget[index]),
                     )),
                     InkWell(
                       onTap: () {
                         setState(() {
-                          documentwidget.removeAt(index);
+                          widget.documentwidget.removeAt(index);
                         });
                       },
                       child: Container(
@@ -107,7 +107,7 @@ class _RequiredDocumentState extends State<RequiredDocument> {
                     _formKey.currentState?.validate();
                     setState(() {
                       if (controller.text.isNotEmpty) {
-                        documentwidget.add(controller.text.trim());
+                        widget.documentwidget.add(controller.text.trim());
                         controller.clear();
                       }
                     });

@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -94,12 +93,22 @@ class _FotgotpassFormState extends State<FotgotpassForm> {
                   const SizedBox(
                     height: 30,
                   ),
-                  const Text(
-                    'Forgot Password',
-                    style: TextStyle(
-                        color: Color.fromRGBO(49, 39, 79, 1),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Get.offAndToNamed('/');
+                        },
+                        icon: const Icon(Icons.arrow_back_ios_sharp),
+                      ),
+                      const Text(
+                        'Forgot Password',
+                        style: TextStyle(
+                            color: Color.fromRGBO(49, 39, 79, 1),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 60,
