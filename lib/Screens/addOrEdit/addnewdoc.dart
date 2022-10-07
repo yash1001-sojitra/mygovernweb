@@ -463,7 +463,6 @@ class _AddnewDocState extends State<AddnewDoc> {
                           color: Colors.white.withOpacity(0.7),
                           child: Container(
                             padding: const EdgeInsets.all(15),
-                            //height: 400,
                             width: size.width * 0.40,
                             child: Form(
                               child: Column(
@@ -481,109 +480,181 @@ class _AddnewDocState extends State<AddnewDoc> {
                                   const Divider(
                                     height: 40,
                                   ),
-                                  Container(
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: CustomDecoration
-                                        .containerCornerRadiusDecoration,
-                                    child: DropdownButton<String>(
-                                      onChanged: (val) {},
-                                      items: <String>['A', 'B', 'C'].map((e) {
-                                        return DropdownMenuItem<String>(
-                                          value: e,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(15),
-                                            child: Text(e),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      hint: const Text('Category'),
-                                      iconSize: 40,
-                                      borderRadius: BorderRadius.circular(10),
-                                      underline: Container(),
-                                      isExpanded: true,
-                                      menuMaxHeight: 500,
-                                    ),
-                                  ),
+                                  StatefulBuilder(builder: (context, setState) {
+                                    return Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: CustomDecoration
+                                          .containerCornerRadiusDecoration,
+                                      child: DropdownButton<String>(
+                                        onChanged: (val) {
+                                          setState(() {
+                                            _selectedCategory =
+                                                val as CategoryData;
+                                          });
+                                        },
+                                        value: _selectedCategory?.category,
+                                        items: snapshot.data
+                                            ?.map((e) => e)
+                                            .toSet()
+                                            .toList()
+                                            .map((e) {
+                                          return DropdownMenuItem<String>(
+                                            value: e.category,
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(15),
+                                              child: Text(e.category),
+                                            ),
+                                          );
+                                        }).toList(),
+                                        hint: const Text('Category'),
+                                        iconSize: 40,
+                                        borderRadius: BorderRadius.circular(10),
+                                        underline: Container(),
+                                        isExpanded: true,
+                                        menuMaxHeight: 500,
+                                      ),
+                                    );
+                                  }),
                                   const SizedBox(height: 10),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 5,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: CustomDecoration
-                                              .containerCornerRadiusDecoration,
-                                          child: DropdownButton<String>(
-                                            onChanged: (val) {},
-                                            items: <String>['A', 'B', 'C']
-                                                .map((e) {
-                                              return DropdownMenuItem<String>(
-                                                value: e,
-                                                child: Padding(
+                                  FutureBuilder<
+                                          QuerySnapshot<Map<String, dynamic>>>(
+                                      future: _selectedCategory != null
+                                          ? FirebaseFirestore.instance
+                                              .collection('Category')
+                                              .doc(_selectedCategory?.id)
+                                              .collection('Documents')
+                                              .get()
+                                          : null,
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
+
+                                        return StatefulBuilder(
+                                            builder: (context, setState) {
+                                          return Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 5,
+                                                child: Container(
                                                   padding:
-                                                      const EdgeInsets.all(15),
-                                                  child: Text(e),
+                                                      const EdgeInsets.all(10),
+                                                  decoration: CustomDecoration
+                                                      .containerCornerRadiusDecoration,
+                                                  child: _isAdd
+                                                      ? TextFormField(
+                                                          decoration: CustomDecoration
+                                                              .textFormFieldDecoration(
+                                                                  "Certificate Name"),
+                                                        )
+                                                      : DropdownButton<String>(
+                                                          value:
+                                                              _selectedCertificate,
+                                                          onChanged: (val) {
+                                                            setState(() =>
+                                                                _selectedCertificate =
+                                                                    val);
+                                                          },
+                                                          items: <String>[
+                                                            'A',
+                                                            'B',
+                                                            'C'
+                                                          ].map((e) {
+                                                            return DropdownMenuItem<
+                                                                String>(
+                                                              value: e,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(15),
+                                                                child: Text(e),
+                                                              ),
+                                                            );
+                                                          }).toList(),
+                                                          hint: const Text(
+                                                              'Choose Certificate'),
+                                                          iconSize: 40,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          underline:
+                                                              Container(),
+                                                          isExpanded: true,
+                                                          menuMaxHeight: 500,
+                                                        ),
                                                 ),
-                                              );
-                                            }).toList(),
-                                            hint: const Text(
-                                                'Choose Certificate'),
-                                            iconSize: 40,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            underline: Container(),
-                                            isExpanded: true,
-                                            menuMaxHeight: 500,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: Container(
-                                          height: 60,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            color: Colors.purple,
-                                          ),
-                                          child: const Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Flexible(
-                                                child: Text(
-                                              'Add',
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  color: Colors.white),
-                                            )),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: Container(
-                                          height: 60,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            color: Colors.purple,
-                                          ),
-                                          child: const Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Flexible(
-                                                child: Text(
-                                              'Choose',
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  color: Colors.white),
-                                            )),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Expanded(
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    setState(
+                                                        (() => _isAdd = true));
+                                                  },
+                                                  child: Container(
+                                                    height: 60,
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50),
+                                                      color: Colors.purple,
+                                                    ),
+                                                    child: const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      child: Flexible(
+                                                          child: Text(
+                                                        'Add',
+                                                        style: TextStyle(
+                                                            fontSize: 17,
+                                                            color:
+                                                                Colors.white),
+                                                      )),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Expanded(
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    setState(
+                                                        (() => _isAdd = false));
+                                                  },
+                                                  child: Container(
+                                                    height: 60,
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50),
+                                                      color: Colors.purple,
+                                                    ),
+                                                    child: const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      child: Flexible(
+                                                          child: Text(
+                                                        'Choose',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                            fontSize: 17,
+                                                            color:
+                                                                Colors.white),
+                                                      )),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                      }),
                                   const SizedBox(height: 10),
                                   Container(
                                     padding: const EdgeInsets.all(10),
@@ -649,10 +720,65 @@ class _AddnewDocState extends State<AddnewDoc> {
                                     padding: const EdgeInsets.all(10),
                                     decoration: CustomDecoration
                                         .containerCornerRadiusDecoration,
-                                    child: Row(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        const SizedBox(
-                                          width: 10,
+                                        Row(
+                                          children: [
+                                            Container(
+                                                height: 50,
+                                                width: 50,
+                                                child: Image.asset(
+                                                    "assets/images/addpdf.png")),
+                                            SizedBox(
+                                              width: 30,
+                                            ),
+                                            Text(pickedFile == null
+                                                ? "File not Selected"
+                                                : pickedFile!.name),
+                                            SizedBox(
+                                              width: 30,
+                                            ),
+                                            TextButton(
+                                              child:
+                                                  const Text("Select Document"),
+                                              onPressed: () {
+                                                selectFile(FileType.any);
+                                              },
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          children: const [
+                                            Expanded(
+                                              child: Divider(
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              "or",
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Expanded(
+                                              child: Divider(
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 10,
                                         ),
                                         SizedBox(
                                             height: 50,
@@ -662,18 +788,6 @@ class _AddnewDocState extends State<AddnewDoc> {
                                         const SizedBox(
                                           width: 30,
                                         ),
-                                        Text(pickedFile == null
-                                            ? "File not Selected"
-                                            : pickedFile!.name.toString()),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        TextButton(
-                                          child: const Text("Select Document"),
-                                          onPressed: () {
-                                            selectFile(FileType.any);
-                                          },
-                                        )
                                       ],
                                     ),
                                   ),
