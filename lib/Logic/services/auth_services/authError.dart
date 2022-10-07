@@ -1,11 +1,12 @@
 // ignore_for_file: file_names
 
 class ErrorHangling {
-   late String errorMessage;
+  late String errorMessage;
   throwErrorMesg({required String errorCode}) {
     switch (errorCode) {
-       case "email-already-in-use":
-        errorMessage = "This e-mail address is already in use, please use a different e-mail address.";
+      case "email-already-in-use":
+        errorMessage =
+            "This e-mail address is already in use, please use a different e-mail address.";
         break;
       case "weak-password":
         errorMessage = "Your password is too short !!";
@@ -17,7 +18,7 @@ class ErrorHangling {
         errorMessage = "Please enter currect password.";
         break;
       case "user-not-found":
-        errorMessage = "User not found.\nPlease Register yourself !";
+        errorMessage = "User not found. Please Register yourself !";
         break;
       case "ERROR_TOO_MANY_REQUESTS":
         errorMessage = "Too many requests. Try again later.";
