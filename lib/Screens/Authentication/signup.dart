@@ -9,6 +9,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../Logic/Modules/admindata/user_model.dart';
 import '../../Logic/provider/userData_provider.dart';
 import '../../Logic/services/auth_services/auth_service.dart';
+import '../HomeScreen/adminpanel.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -23,32 +24,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final deviceSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient:
-              LinearGradient(colors: [Color(0xff59bcdd), Color(0xffdf39f7)]),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            if (deviceSize.width > 1100)
-              Lottie.asset('assets/animations/login_animation.json'),
-            Center(
-              child: SizedBox(
-                width: 400,
-                height: 600,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  color: Colors.white.withAlpha(230),
-                  child: const SignUpForm(),
-                ),
+      body: StreamBuilder<FireBaseUser?>(
+          stream: Provider.of<AuthService>(context).user,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.data != null) {
+              return DashBoard();
+            }
+            print(Get.routeTree.routes);
+            Get.reset();
+            return Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Color(0xff59bcdd), Color(0xffdf39f7)]),
               ),
-            ),
-          ],
-        ),
-      ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  if (deviceSize.width > 1100)
+                    Lottie.asset('assets/animations/login_animation.json'),
+                  Center(
+                    child: SizedBox(
+                      width: 400,
+                      height: 600,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        color: Colors.white.withAlpha(230),
+                        child: const SignUpForm(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
     );
   }
 }
@@ -57,15 +71,13 @@ class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _SignUpFormState createState() => _SignUpFormState();
 }
 
 class _SignUpFormState extends State<SignUpForm> {
   late AuthService authService;
-  bool showLoading = false;
-  final bool _loginLoading = false;
-  bool showAlert = false;
+  bool _loginLoading = false;
+
   bool ispasswordvisible = true;
   final _form = GlobalKey<FormState>();
   String? error;
@@ -78,9 +90,12 @@ class _SignUpFormState extends State<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    authService = Provider.of<AuthService>(context);
-    final userDataProvider = Provider.of<UsereDataProvider>(context);
+    authService = Provider.of<AuthService>(context, listen: false);
 
+    final userDataProvider =
+        Provider.of<UsereDataProvider>(context, listen: false);
+    emailController.text = "a@g.com";
+    passwordController.text = "12345678";
     return _loginLoading
         ? const Center(
             child: CircularProgressIndicator(),
@@ -215,12 +230,10 @@ class _SignUpFormState extends State<SignUpForm> {
                               onPressed: () async {
                                 if (_isLogin) {
                                   if (!_form.currentState!.validate()) return;
-                                  //progressIndicater(context, showLoading = true);
-                                  setState(() {
-                                    showLoading = true;
-                                  });
+                                  setState(() => _loginLoading = true);
                                   String? loginInfo = await loginByRole();
                                   setState(() {
+                                    _loginLoading = false;
                                     if (loginInfo != null) {
                                       error = loginInfo;
                                     } else {
@@ -228,22 +241,12 @@ class _SignUpFormState extends State<SignUpForm> {
                                     }
                                   });
                                 } else {
-                                  setState(() {
-                                    showLoading = true;
-                                  });
-                                  // progressIndicater(context, showLoading = true);
                                   FireBaseUser? user = await createUser();
                                   userDataProvider.changeId(user!.uid);
                                   userDataProvider.saveUserData();
-                                  showAlert == true
-                                      ? null
-                                      : progressIndicater(
-                                          context, showLoading = true);
-                                  Navigator.pop(context);
                                   emailController.clear();
                                   passwordController.clear();
                                 }
-                                // Get.toNamed('/home');
                               },
                               icon: const Icon(Icons.login),
                               label: Text(_isLogin ? 'Login' : 'Register'),
@@ -255,7 +258,7 @@ class _SignUpFormState extends State<SignUpForm> {
                               onPressed: () async {
                                 await userDataProvider.signInWithGoogle();
                                 // await GoogleSignIn().signIn();
-                                Get.toNamed('/home');
+                                //Get.offAndToNamed('/home');
                               },
                               icon: SizedBox(
                                 height: 25,
@@ -332,10 +335,6 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Future<void> alertBox(BuildContext context, e) {
-    setState(() {
-      showLoading = false;
-      showAlert = true;
-    });
     return Alert(
       context: context,
       padding: const EdgeInsets.only(left: 10, right: 10),
@@ -352,7 +351,7 @@ class _SignUpFormState extends State<SignUpForm> {
       await authService.signInWithEmailAndPassword(
           emailController.text.trim().toString(),
           passwordController.text.trim().toString());
-      Get.toNamed('/home');
+      //Get.offAndToNamed('/home');
       return null;
       // Navigator.pushNamedAndRemoveUntil(
       //     context, homepageScreenRoute, (route) => false);

@@ -12,7 +12,7 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
-  bool isExpanded = false;
+  bool isExpanded = true;
   int _selected_index = 0;
   List category = ["Add Category", "Add New Document", "Edit Document"];
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -47,13 +47,12 @@ class _DashBoardState extends State<DashBoard> {
                 // labelType: NavigationRailLabelType.selected,
                 selectedIndex: _selected_index,
                 onDestinationSelected: (int index) async {
-                  print(index);
                   setState(() {
                     _selected_index = index;
                   });
                   if (index == 1) {
                     _signOut();
-                    Get.toNamed('/');
+                    //Get.toNamed('/');
                   }
                 },
 
