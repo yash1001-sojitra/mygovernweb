@@ -135,7 +135,7 @@ class _AddCategoryState extends State<AddCategory> {
                                       context, showLoading = true);
                                   if (_pickedimage == null) {
                                     String url =
-                                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxhtmBqlJilp6X2q2XsYxJ9DVYb_F8x17DjIOJcHtT&s";
+                                        "https://firebasestorage.googleapis.com/v0/b/mygovern-b2fbb.appspot.com/o/url%2Fnational.png?alt=media&token=ce4e8ee7-7e20-45d2-8f9f-b9141df48222";
                                     CategorydataProvider.changeUrl(url);
                                   } else {
                                     final ref = FirebaseStorage.instance
