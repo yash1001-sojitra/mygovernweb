@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mygovernweb/Screens/Authentication/forgotpass.dart';
 import 'package:mygovernweb/Screens/Authentication/signup.dart';
 import 'package:mygovernweb/Screens/HomeScreen/adminpanel.dart';
+import 'package:mygovernweb/Screens/requests/requests_list.dart';
 
 import '../Screens/addOrEdit/addcategory.dart';
 import '../Screens/addOrEdit/addnewdoc.dart';
@@ -22,6 +23,9 @@ class Flurorouter {
   static Handler _HomescreenHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, dynamic> params) =>
           DashBoard());
+  static Handler _RequestScreenHander = Handler(
+      handlerFunc: (BuildContext? context, Map<String, dynamic> params) =>
+          RequestsList());
   static Handler _AddCategoryHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, dynamic> params) =>
           AddCategory());
@@ -40,6 +44,8 @@ class Flurorouter {
         handler: _ForgotpassHandler, transitionType: TransitionType.fadeIn);
     router.define('/home',
         handler: _HomescreenHandler, transitionType: TransitionType.fadeIn);
+    router.define('/Request_screen',
+        handler: _RequestScreenHander, transitionType: TransitionType.fadeIn);
     router.define('/Add_category',
         handler: _AddCategoryHandler, transitionType: TransitionType.fadeIn);
     router.define('/Add_new_doc',

@@ -145,6 +145,9 @@ class _DashBoardState extends State<DashBoard> {
                                             SizedBox(width: 20),
                                             AdminCard('edit_doc',
                                                 'Edit Document', '/Edit_doc'),
+                                            SizedBox(width: 20),
+                                            AdminCard('request', 'Request',
+                                                '/Request_screen'),
                                           ],
                                         ),
                                       )
