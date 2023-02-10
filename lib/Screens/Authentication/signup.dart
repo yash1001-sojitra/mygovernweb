@@ -324,10 +324,6 @@ class _SignUpFormState extends State<SignUpForm> {
           emailController.text.toString(), passwordController.text.toString());
 
       Navigator.pop(context);
-      // Navigator.pushReplacementNamed(context, "/home");
-
-      // Get.toNamed('/home');
-
       return user;
     } catch (e) {
       return alertBox(context, e);
@@ -351,12 +347,11 @@ class _SignUpFormState extends State<SignUpForm> {
       await authService.signInWithEmailAndPassword(
           emailController.text.trim().toString(),
           passwordController.text.trim().toString());
-      //Get.offAndToNamed('/home');
+      Get.offAndToNamed('/home');
       return null;
       // Navigator.pushNamedAndRemoveUntil(
       //     context, homepageScreenRoute, (route) => false);
     } catch (e) {
-      //return alertBox(context, e);
       return e.toString();
     }
   }

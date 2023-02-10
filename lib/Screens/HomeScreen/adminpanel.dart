@@ -143,21 +143,6 @@ class _DashBoardState extends State<DashBoard> {
                                             SizedBox(width: 20),
                                             AdminCard('edit_doc',
                                                 'Edit Document', '/Edit_doc'),
-
-                                            /* AddCard(
-                                              imgpath:
-                                                  "assets/images/category.png",
-                                              title: category[0],
-                                              routename: "/Add_category"),
-                                          AddCard(
-                                              imgpath: "assets/images/add.png",
-                                              title: category[1],
-                                              routename: "/Add_new_doc"),
-                                          AddCard(
-                                            imgpath: "assets/images/edit.png",
-                                            title: category[2],
-                                            routename: "/Edit_doc",
-                                          ), */
                                           ],
                                         ),
                                       )
@@ -168,22 +153,6 @@ class _DashBoardState extends State<DashBoard> {
                                             CrossAxisAlignment.stretch,
                                         mainAxisSize: MainAxisSize.min,
                                         children: const [
-                                          /* AddCard(
-                                        imgpath:
-                                            "assets/images/category.png",
-                                        title: category[0],
-                                        routename: "/Add_category"),
-                                        const SizedBox(height: 10),
-                                        AddCard(
-                                        imgpath: "assets/images/add.png",
-                                        title: category[1],
-                                        routename: "/Add_new_doc"),
-                                        const SizedBox(height: 10),
-                                        AddCard(
-                                      imgpath: "assets/images/edit.png",
-                                      title: category[2],
-                                      routename: "/Edit_doc",
-                                        ), */
                                           AdminCard('add_category',
                                               'Add category', '/Add_category'),
                                           SizedBox(height: 20),

@@ -34,10 +34,29 @@ class _AddCategoryState extends State<AddCategory> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            'assets/images/back.jpg',
-            fit: BoxFit.cover,
+          ShaderMask(
+            shaderCallback: (bounds) => const LinearGradient(
+              colors: [Colors.black12, Colors.black38],
+              begin: Alignment.bottomCenter,
+              end: Alignment.center,
+            ).createShader(bounds),
+            blendMode: BlendMode.darken,
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/back.jpg"),
+                  fit: BoxFit.cover,
+                  colorFilter:
+                      ColorFilter.mode(Colors.black12, BlendMode.darken),
+                ),
+              ),
+            ),
           ),
+          // Image.asset(
+          //   'assets/images/back.jpg',
+          //   fit: BoxFit.cover,
+          //   colorBlendMode: BlendMode.darken,
+          // ),
           size.width > 768
               ? Center(
                   child: SingleChildScrollView(
