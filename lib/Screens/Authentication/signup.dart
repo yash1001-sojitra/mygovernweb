@@ -34,8 +34,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             } else if (snapshot.data != null) {
               return DashBoard();
             }
-            print(Get.routeTree.routes);
-            Get.reset();
+
             return Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(

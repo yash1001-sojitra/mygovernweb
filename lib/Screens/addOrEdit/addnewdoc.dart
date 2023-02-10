@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,14 +25,10 @@ class AddnewDoc extends StatefulWidget {
 class _AddnewDocState extends State<AddnewDoc> {
   final _controller = TextEditingController();
   File? _pickedimage;
-  File? imageFile;
-  File? PfdFile;
-  PlatformFile? pickedFile;
-  bool showLoading = false;
+
   Uint8List webImage = Uint8List(8);
   CategoryData? _selectedCategory;
   String? _selectedCertificate;
-  final bool _isAdd = false;
   List<String> docSteps = [];
   List<String> docRequired = [];
 
@@ -53,11 +48,11 @@ class _AddnewDocState extends State<AddnewDoc> {
             return Stack(
               fit: StackFit.expand,
               children: [
-                /* Image.asset(
+                /*   Image.asset(
                   'assets/images/image1.jpg',
                   fit: BoxFit.cover,
-                ), */
-
+                ),
+ */
                 Container(
                   decoration: const BoxDecoration(
                       gradient: LinearGradient(colors: [
@@ -304,18 +299,6 @@ class _AddnewDocState extends State<AddnewDoc> {
             );
           }),
     );
-  }
-
-  Future selectFile(FileType fileType) async {
-    final result = await FilePicker.platform.pickFiles(type: fileType);
-    if (result == null) return;
-    setState(() {
-      pickedFile = result.files.first.bytes as PlatformFile?;
-
-      if (pickedFile != null) {
-        PfdFile = File(pickedFile!.name.toString());
-      }
-    });
   }
 
   Future selectfilefromweb() async {

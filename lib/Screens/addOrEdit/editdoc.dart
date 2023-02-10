@@ -1,10 +1,18 @@
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
+import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mygovernweb/Screens/addOrEdit/widgets/requireddoc.dart';
-import 'package:mygovernweb/Screens/addOrEdit/widgets/steps.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
+import 'package:uuid/uuid.dart';
 
+import '../../Logic/Modules/add_category_model.dart';
+import '../../Logic/services/firestore/category_firestore_services.dart';
 import '../../Logic/widgets/decoration.dart';
+import 'list_of_docs_edit.dart';
 
 class EditDoc extends StatefulWidget {
   const EditDoc({super.key});
@@ -14,219 +22,311 @@ class EditDoc extends StatefulWidget {
 }
 
 class _EditDocState extends State<EditDoc> {
-  late File imageFile;
-  PlatformFile? pickedFile;
-  bool showLoading = false;
+  final _controller = TextEditingController();
+  File? _pickedimage;
+
+  Uint8List webImage = Uint8List(8);
+  CategoryData? _selectedCategory;
+  List<String> docSteps = [];
+  List<String> docRequired = [];
+  Map<String, dynamic>? docData;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            'assets/images/back.jpg',
-            fit: BoxFit.cover,
-          ),
-          // size.width > 768
-          //     ?
-          Center(
-            child: SingleChildScrollView(
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+      body: StreamBuilder<List<CategoryData>>(
+          stream: CategoryDataFirestoreService().getCategories(),
+          builder: (ctx, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                    /*  Color(0xffADA996),
+                    Color(0xffF2F2F2),
+                    Color(0xffDBDBDB),
+                    Color(0xffEAEAEA) */
+                  ])),
                 ),
-                color: Colors.white.withOpacity(0.7),
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  //height: 400,
-                  width: size.width * 0.40,
-                  child: Form(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Text(
-                            'Edit Document',
-                            style: TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold),
-                          ),
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                  child: Center(
+                    child: SingleChildScrollView(
+                      child: Card(
+                        elevation: 10,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        const Divider(
-                          height: 40,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration:
-                              CustomDecoration.containerCornerRadiusDecoration,
-                          child: DropdownButton<String>(
-                            onChanged: (val) {},
-                            items: <String>['A', 'B', 'C'].map((e) {
-                              return DropdownMenuItem<String>(
-                                value: e,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: Text(e),
+                        color: Colors.white.withOpacity(1),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(10)),
+                          padding: const EdgeInsets.all(15),
+                          width: size.width > 768
+                              ? size.width * 0.40
+                              : size.width * 0.90,
+                          child: Form(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(8),
+                                  child: Text(
+                                    'Edit Document',
+                                    style: TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              );
-                            }).toList(),
-                            hint: const Text('Category'),
-                            iconSize: 40,
-                            borderRadius: BorderRadius.circular(10),
-                            underline: Container(),
-                            isExpanded: true,
-                            menuMaxHeight: 500,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 5,
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: CustomDecoration
-                                    .containerCornerRadiusDecoration,
-                                child: DropdownButton<String>(
-                                  onChanged: (val) {},
-                                  items: <String>['A', 'B', 'C'].map((e) {
-                                    return DropdownMenuItem<String>(
-                                      value: e,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(15),
-                                        child: Text(e),
+                                const Divider(
+                                  height: 40,
+                                ),
+                                StatefulBuilder(builder: (cntx, setState) {
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: CustomDecoration
+                                            .containerCornerRadiusDecoration,
+                                        child: DropdownButton<String>(
+                                          onChanged: (val) {
+                                            setState(() {
+                                              _selectedCategory = snapshot.data
+                                                  ?.firstWhere((element) =>
+                                                      element.category ==
+                                                      val) as CategoryData;
+                                            });
+                                          },
+                                          value: _selectedCategory?.category,
+                                          items: snapshot.data
+                                              ?.map((e) => e)
+                                              .toSet()
+                                              .map((e) {
+                                            return DropdownMenuItem<String>(
+                                              value: e.category,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(15),
+                                                child: Text(e.category),
+                                              ),
+                                            );
+                                          }).toList(),
+                                          hint: const Text('Category'),
+                                          iconSize: 40,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          underline: Container(),
+                                          isExpanded: true,
+                                          menuMaxHeight: 500,
+                                        ),
                                       ),
-                                    );
-                                  }).toList(),
-                                  hint: const Text('Choose Certificate'),
-                                  iconSize: 40,
-                                  borderRadius: BorderRadius.circular(10),
-                                  underline: Container(),
-                                  isExpanded: true,
-                                  menuMaxHeight: 500,
+                                      const SizedBox(height: 10),
+                                      if (_selectedCategory != null)
+                                        ListofDocsEdit(
+                                            _selectedCategory!.id, docData),
+                                    ],
+                                  );
+                                }),
+                                const SizedBox(height: 10),
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: CustomDecoration
+                                      .containerCornerRadiusDecoration,
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      SizedBox(
+                                          height: 50,
+                                          width: 50,
+                                          child: _pickedimage == null
+                                              ? Image.asset(
+                                                  "assets/images/add-image.png")
+                                              : kIsWeb
+                                                  ? Image.memory(webImage)
+                                                  : Image.file(_pickedimage!)),
+                                      const SizedBox(
+                                        width: 30,
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          _pickedimage == null
+                                              ? "File not Selected"
+                                              : _pickedimage!.toString(),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      TextButton(
+                                        child: const Text("Select Icon"),
+                                        onPressed: () {
+                                          selectfilefromweb();
+                                        },
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(height: 10),
+                                /*    if (docData != null)
+                                  RequiredDocument(
+                                      docData?['steps'] as List<String>),
+                                const SizedBox(height: 10),
+                                Steps(docSteps), */
+                                const SizedBox(height: 10),
+                                GestureDetector(
+                                  onTap: () async {
+                                    final data = await FirebaseFirestore
+                                        .instance
+                                        .collection('Category')
+                                        .doc(_selectedCategory?.id)
+                                        .collection('Documents')
+                                        .get();
+                                    final ids =
+                                        data.docs.map((e) => e.id).toList();
+                                    try {
+                                      if (_selectedCategory != null ||
+                                          _controller.text.isNotEmpty ||
+                                          docSteps.isNotEmpty ||
+                                          docRequired.isNotEmpty) {
+                                        if (ids.contains(_controller.text)) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'Entered document is already present!',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                            ),
+                                          );
+                                          return;
+                                        }
+                                        progressIndicater(context, true);
+                                        final ref = FirebaseStorage.instance
+                                            .ref()
+                                            .child('url')
+                                            .child(_controller.text);
+                                        await ref.putData(webImage);
+                                        String url = await ref.getDownloadURL();
+                                        await FirebaseFirestore.instance
+                                            .collection('Category')
+                                            .doc(_selectedCategory?.id)
+                                            .collection('Documents')
+                                            .doc(_controller.text)
+                                            .set({
+                                          'Id': const Uuid().v4(),
+                                          'document': _controller.text,
+                                          'steps': docSteps,
+                                          'requiredDoc': docRequired,
+                                          'iconUrl': url,
+                                        });
+
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'Document Added Successfully!',
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        );
+                                        Navigator.pop(context);
+                                        Get.toNamed('/home');
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                content: Text(
+                                          'Fill all the details!',
+                                          textAlign: TextAlign.center,
+                                        )));
+                                      }
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        color: Colors.deepPurpleAccent,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: const Center(
+                                        child: Text(
+                                      "Upload Details",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500),
+                                    )),
+                                  ),
+                                )
+                              ],
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration:
-                              CustomDecoration.containerCornerRadiusDecoration,
-                          child: DropdownButton<String>(
-                            onChanged: (val) {},
-                            items: <String>['A', 'B', 'C'].map((e) {
-                              return DropdownMenuItem<String>(
-                                value: e,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: Text(e),
-                                ),
-                              );
-                            }).toList(),
-                            hint: const Text('Sub Category'),
-                            iconSize: 40,
-                            borderRadius: BorderRadius.circular(10),
-                            underline: Container(),
-                            isExpanded: true,
-                            menuMaxHeight: 500,
                           ),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration:
-                              CustomDecoration.containerCornerRadiusDecoration,
-                          child: Row(
-                            children: [
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.white,
-                                child: CircleAvatar(
-                                  backgroundImage: pickedFile != null
-                                      ? FileImage((File("${pickedFile!.path}")))
-                                      : const AssetImage(
-                                              "assets/images/add-image.jpg")
-                                          as ImageProvider,
-                                  radius: 30,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 30,
-                              ),
-                              TextButton(
-                                child: const Text("Change Icon"),
-                                onPressed: () {
-                                  selectFile();
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        const RequiredDocument([]),
-                        const SizedBox(height: 10),
-                        const Steps([]),
-                        const SizedBox(height: 20),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                                color: Colors.deepPurpleAccent,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Center(
-                                child: Text(
-                              "Edit Details",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            )),
-                          ),
-                        )
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          )
-        ],
-      ),
+              ],
+            );
+          }),
     );
   }
 
-  Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.image);
-    if (result == null) return;
-    setState(() {
-      pickedFile = result.files.first;
-
-      if (pickedFile != null) {
-        imageFile = File(pickedFile!.path!);
+  Future selectfilefromweb() async {
+    if (!kIsWeb) {
+      final ImagePicker picker = ImagePicker();
+      XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        var selected = File(image.path);
+        setState(() {
+          _pickedimage = selected;
+        });
+      } else {
+        print("no image has been picked");
       }
-    });
+    } else if (kIsWeb) {
+      final ImagePicker picker = ImagePicker();
+      XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+      );
+      if (image != null) {
+        var f = await image.readAsBytes();
+        setState(() {
+          webImage = f;
+          _pickedimage = File(image.name);
+        });
+      } else {
+        print("no image has been picked");
+      }
+    } else {
+      print('something went wrong');
+    }
   }
 
-  Future<dynamic>? progressIndicater(BuildContext context, showLoading) {
-    if (showLoading == true) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          });
-    } else {
-      return null;
-    }
+  Future progressIndicater(BuildContext context, showLoading) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Center(
+              child: Lottie.asset("assets/animations/lodingtrans.json",
+                  height: 50, width: 50)
+              // CircularProgressIndicator(),
+              );
+        });
   }
 }
