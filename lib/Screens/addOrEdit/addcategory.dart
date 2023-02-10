@@ -34,10 +34,29 @@ class _AddCategoryState extends State<AddCategory> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            'assets/images/back.jpg',
-            fit: BoxFit.cover,
+          ShaderMask(
+            shaderCallback: (bounds) => const LinearGradient(
+              colors: [Colors.black12, Colors.black38],
+              begin: Alignment.bottomCenter,
+              end: Alignment.center,
+            ).createShader(bounds),
+            blendMode: BlendMode.darken,
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/back.jpg"),
+                  fit: BoxFit.cover,
+                  colorFilter:
+                      ColorFilter.mode(Colors.black12, BlendMode.darken),
+                ),
+              ),
+            ),
           ),
+          // Image.asset(
+          //   'assets/images/back.jpg',
+          //   fit: BoxFit.cover,
+          //   colorBlendMode: BlendMode.darken,
+          // ),
           size.width > 768
               ? Center(
                   child: SingleChildScrollView(
@@ -135,7 +154,7 @@ class _AddCategoryState extends State<AddCategory> {
                                       context, showLoading = true);
                                   if (_pickedimage == null) {
                                     String url =
-                                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxhtmBqlJilp6X2q2XsYxJ9DVYb_F8x17DjIOJcHtT&s";
+                                        "https://firebasestorage.googleapis.com/v0/b/mygovern-b2fbb.appspot.com/o/url%2Fnational.png?alt=media&token=ce4e8ee7-7e20-45d2-8f9f-b9141df48222";
                                     CategorydataProvider.changeUrl(url);
                                   } else {
                                     final ref = FirebaseStorage.instance
