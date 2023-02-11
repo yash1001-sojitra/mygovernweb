@@ -14,18 +14,25 @@ class RequestDocs extends StatelessWidget {
         shrinkWrap: true,
         itemCount: ids.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            onTap: () {
-              funnction(ids[index]);
-            },
-            title: Text(
-              data[index].request,
-              style: const TextStyle(color: Colors.white),
-            ),
-            trailing: const Icon(
-              Icons.arrow_forward_ios_outlined,
-              color: Colors.white,
-            ),
+          return Column(
+            children: [
+              ListTile(
+                onTap: () {
+                  funnction(ids[index]);
+                },
+                title: Text(
+                  data[index].request,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                trailing: const Icon(
+                  Icons.arrow_forward_ios_outlined,
+                  color: Colors.white,
+                ),
+              ),
+              const Divider(
+                color: Colors.white12,
+              ),
+            ],
           );
         });
   }

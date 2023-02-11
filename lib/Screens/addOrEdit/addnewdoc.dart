@@ -252,6 +252,7 @@ class _AddnewDocState extends State<AddnewDoc> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(
+                                            backgroundColor: Colors.green,
                                             content: Text(
                                               'Document Added Successfully!',
                                               textAlign: TextAlign.center,
@@ -263,10 +264,11 @@ class _AddnewDocState extends State<AddnewDoc> {
                                       } else {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(const SnackBar(
+                                                backgroundColor: Colors.red,
                                                 content: Text(
-                                          'Fill all the details!',
-                                          textAlign: TextAlign.center,
-                                        )));
+                                                  'Fill all the details!',
+                                                  textAlign: TextAlign.center,
+                                                )));
                                       }
                                     } catch (e) {
                                       print(e);

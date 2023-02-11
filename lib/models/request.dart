@@ -8,7 +8,7 @@ class DocRequest {
   final String request;
   final String requestId;
   final ProfileModel profileModel;
-  final String message;
+  String message;
   REQUEST status;
 
   DocRequest(this.request, this.requestId, this.profileModel, this.message,

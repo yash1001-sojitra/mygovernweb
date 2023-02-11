@@ -75,8 +75,9 @@ class _RequestsListState extends State<RequestsList> {
   void changeDoc(String request) {
     selectedRequest =
         requests.where((element) => element.request == request).toList();
-
-    setState(() {});
+    setState(() {
+      _selectedDetail = null;
+    });
   }
 
   @override
@@ -94,11 +95,10 @@ class _RequestsListState extends State<RequestsList> {
             return Row(
               children: [
                 Expanded(
-                  flex: 2,
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: const BoxDecoration(
-                      color: Colors.black26,
+                      color: Color(0xff2d3037),
                       boxShadow: [
                         BoxShadow(
                           blurRadius: 10,
@@ -107,14 +107,22 @@ class _RequestsListState extends State<RequestsList> {
                     ),
                     width: 250,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Text(
-                          'Documents',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white30),
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'Requests',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                         const Divider(
@@ -145,13 +153,18 @@ class _RequestsListState extends State<RequestsList> {
                                       "No name"),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                side: const BorderSide(),
+                                side: BorderSide(
+                                    color: _selectedDetail?.requestId ==
+                                            selectedRequest[index].requestId
+                                        ? Colors.green
+                                        : Colors.grey,
+                                    width: 2),
                               ),
                               trailing: Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                   color: Colors.grey,
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
                                     getStatus(selectedRequest[index].status)),

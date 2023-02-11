@@ -1,10 +1,9 @@
-import 'dart:typed_data';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mygovernweb/Logic/provider/categorydata_provider.dart';
 import 'package:provider/provider.dart';
@@ -34,24 +33,13 @@ class _AddCategoryState extends State<AddCategory> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          ShaderMask(
+          /* ShaderMask(
             shaderCallback: (bounds) => const LinearGradient(
               colors: [Colors.black12, Colors.black38],
               begin: Alignment.bottomCenter,
               end: Alignment.center,
             ).createShader(bounds),
-            blendMode: BlendMode.darken,
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/back.jpg"),
-                  fit: BoxFit.cover,
-                  colorFilter:
-                      ColorFilter.mode(Colors.black12, BlendMode.darken),
-                ),
-              ),
-            ),
-          ),
+          ), */
           // Image.asset(
           //   'assets/images/back.jpg',
           //   fit: BoxFit.cover,
@@ -112,7 +100,7 @@ class _AddCategoryState extends State<AddCategory> {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    Container(
+                                    SizedBox(
                                         height: 50,
                                         width: 50,
                                         child: _pickedimage == null
@@ -132,7 +120,7 @@ class _AddCategoryState extends State<AddCategory> {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 10,
                                     ),
                                     TextButton(
@@ -175,6 +163,17 @@ class _AddCategoryState extends State<AddCategory> {
                                     showLoading = false;
                                   });
                                   Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      backgroundColor: Colors.green,
+                                      content: Text(
+                                        'Category Added Successfully!',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  );
+                                  Navigator.pop(context);
+                                  Get.toNamed('/home');
                                 },
                                 child: Container(
                                   height: 50,
@@ -249,7 +248,7 @@ class _AddCategoryState extends State<AddCategory> {
                                   const SizedBox(
                                     width: 10,
                                   ),
-                                  Container(
+                                  SizedBox(
                                       height: 50,
                                       width: 50,
                                       child: _pickedimage == null
@@ -264,7 +263,7 @@ class _AddCategoryState extends State<AddCategory> {
                                   Text(_pickedimage == null
                                       ? "File not Selected"
                                       : _pickedimage!.toString()),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 10,
                                   ),
                                   TextButton(
@@ -305,7 +304,17 @@ class _AddCategoryState extends State<AddCategory> {
                                 setState(() {
                                   showLoading = false;
                                 });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    backgroundColor: Colors.green,
+                                    content: Text(
+                                      'Category Added Successfully!',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                );
                                 Navigator.pop(context);
+                                Get.toNamed('/home');
                               },
                               child: Container(
                                 height: 50,
@@ -334,8 +343,8 @@ class _AddCategoryState extends State<AddCategory> {
 
   Future selectfilefromweb() async {
     if (!kIsWeb) {
-      final ImagePicker _picker = ImagePicker();
-      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      final ImagePicker picker = ImagePicker();
+      XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         var selected = File(image.path);
         setState(() {
@@ -345,8 +354,8 @@ class _AddCategoryState extends State<AddCategory> {
         print("no image has been picked");
       }
     } else if (kIsWeb) {
-      final ImagePicker _picker = ImagePicker();
-      XFile? image = await _picker.pickImage(
+      final ImagePicker picker = ImagePicker();
+      XFile? image = await picker.pickImage(
         source: ImageSource.gallery,
       );
       if (image != null) {

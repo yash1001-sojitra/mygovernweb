@@ -9,6 +9,8 @@ class RequestDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final messageController = TextEditingController();
+    messageController.text = request?.message ?? "";
     return request == null
         ? const Center(
             child: Text('Empty'),
@@ -86,6 +88,31 @@ class RequestDetails extends StatelessWidget {
                 ),
                 const Divider(),
                 Row(
+                  children: [
+                    const Expanded(child: Text('Comment : ')),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextFormField(
+                          controller: messageController,
+                          maxLines: 6,
+                          style: const TextStyle(fontSize: 15),
+                          decoration: const InputDecoration(
+                            hintText: "Add comment here",
+                            border: InputBorder.none,
+                            fillColor: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const Divider(),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
@@ -94,12 +121,16 @@ class RequestDetails extends StatelessWidget {
                             MaterialStateProperty.all(Colors.green),
                       ),
                       onPressed: () async {
+                        request?.message = messageController.text;
                         await FirebaseFirestore.instance
                             .collection("Requests")
                             .doc(request?.profileModel.uid)
                             .collection("Documents")
                             .doc(request?.request)
-                            .update({'status': 1});
+                            .update({
+                          'status': 1,
+                          'message': messageController.text
+                        });
                         changeState(request!.requestId, false);
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -113,12 +144,16 @@ class RequestDetails extends StatelessWidget {
                         backgroundColor: MaterialStateProperty.all(Colors.red),
                       ),
                       onPressed: () async {
+                        request?.message = messageController.text;
                         await FirebaseFirestore.instance
                             .collection("Requests")
                             .doc(request?.profileModel.uid)
                             .collection("Documents")
                             .doc(request?.request)
-                            .update({'status': 2});
+                            .update({
+                          'status': 2,
+                          'message': messageController.text
+                        });
                         changeState(request!.requestId, true);
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
